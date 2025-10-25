@@ -51,9 +51,9 @@
     
     <div class="hero__visual">
       <div class="hero__car-showcase">
-        <div class="hero__car-card hero__car-card--featured">
+        <div class="hero__car-card hero__car-card--featured" *ngIf="bestOffer()">
           <div class="car-image">
-            <img [src]="bestOffer()?.images?.[0] || '/assets/placeholder-car.jpg'" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" class="car-img" *ngIf="bestOffer()?.images?.[0]; else carPlaceholder">
+            <img [src]="bestOffer()?.images?.[0]" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" class="car-img" *ngIf="bestOffer()?.images?.[0]; else carPlaceholder">
             <ng-template #carPlaceholder>
               <div class="car-placeholder">
                 <i class="fas fa-car"></i>
@@ -62,17 +62,17 @@
             <div class="car-badge">Хит продаж</div>
           </div>
           <div class="car-info">
-            <h3>BMW X5 2023</h3>
-            <p class="car-price">2.8M ₽</p>
+            <h3>{{ bestOffer()?.brand }} {{ bestOffer()?.model }} {{ bestOffer()?.year }}</h3>
+            <p class="car-price">{{ formatPrice(bestOffer()?.price) }}</p>
             <div class="car-specs">
-              <span>3.0л • Автомат • 4WD</span>
+              <span>{{ bestOffer()?.engine }}л • {{ bestOffer()?.gearbox }} • {{ bestOffer()?.drive }}</span>
             </div>
           </div>
         </div>
         
         <div class="hero__car-card hero__car-card--secondary" *ngIf="popular()[0]">
           <div class="car-image">
-            <img [src]="popular()[0]?.images?.[0] || '/assets/placeholder-car.jpg'" [alt]="popular()[0]?.brand + ' ' + popular()[0]?.model" class="car-img" *ngIf="popular()[0]?.images?.[0]; else carPlaceholder2">
+            <img [src]="popular()[0]?.images?.[0]" [alt]="popular()[0]?.brand + ' ' + popular()[0]?.model" class="car-img" *ngIf="popular()[0]?.images?.[0]; else carPlaceholder2">
             <ng-template #carPlaceholder2>
               <div class="car-placeholder">
                 <i class="fas fa-car"></i>
@@ -81,7 +81,7 @@
             <div class="car-badge car-badge--sale">Скидка 15%</div>
           </div>
           <div class="car-info">
-            <h3>{{ popular()[0]?.brand }} {{ popular()[0]?.model }}</h3>
+            <h3>{{ popular()[0]?.brand }} {{ popular()[0]?.model }} {{ popular()[0]?.year }}</h3>
             <p class="car-price">{{ formatPrice(popular()[0]?.price) }}</p>
             <div class="car-specs">
               <span>{{ popular()[0]?.engine }}л • {{ popular()[0]?.gearbox }} • {{ popular()[0]?.drive }}</span>
@@ -91,7 +91,7 @@
         
         <div class="hero__car-card hero__car-card--tertiary" *ngIf="popular()[1]">
           <div class="car-image">
-            <img [src]="popular()[1]?.images?.[0] || '/assets/placeholder-car.jpg'" [alt]="popular()[1]?.brand + ' ' + popular()[1]?.model" class="car-img" *ngIf="popular()[1]?.images?.[0]; else carPlaceholder3">
+            <img [src]="popular()[1]?.images?.[0]" [alt]="popular()[1]?.brand + ' ' + popular()[1]?.model" class="car-img" *ngIf="popular()[1]?.images?.[0]; else carPlaceholder3">
             <ng-template #carPlaceholder3>
               <div class="car-placeholder">
                 <i class="fas fa-car"></i>
@@ -100,7 +100,7 @@
             <div class="car-badge car-badge--new">Новинка</div>
           </div>
           <div class="car-info">
-            <h3>{{ popular()[1]?.brand }} {{ popular()[1]?.model }}</h3>
+            <h3>{{ popular()[1]?.brand }} {{ popular()[1]?.model }} {{ popular()[1]?.year }}</h3>
             <p class="car-price">{{ formatPrice(popular()[1]?.price) }}</p>
             <div class="car-specs">
               <span>{{ popular()[1]?.engine }}л • {{ popular()[1]?.gearbox }} • {{ popular()[1]?.drive }}</span>
@@ -203,36 +203,39 @@
       <div class="best-offer__content">
         <div class="best-offer__car">
         <div class="car-image-large">
-          <div class="car-placeholder-large">
-            <i class="fas fa-car"></i>
-          </div>
+          <img [src]="fallbackCar()?.images?.[0]" [alt]="fallbackCar()?.brand + ' ' + fallbackCar()?.model" class="car-img-large" *ngIf="fallbackCar()?.images?.[0]; else fallbackPlaceholder">
+          <ng-template #fallbackPlaceholder>
+            <div class="car-placeholder-large">
+              <i class="fas fa-car"></i>
+            </div>
+          </ng-template>
           <div class="car-badge-large">Популярный выбор</div>
         </div>
           <div class="car-details">
-            <h3 class="car-title">BMW X5 2023</h3>
-            <div class="car-price-large">2.8M ₽</div>
+            <h3 class="car-title">{{ fallbackCar()?.brand }} {{ fallbackCar()?.model }} {{ fallbackCar()?.year }}</h3>
+            <div class="car-price-large">{{ formatPrice(fallbackCar()?.price) }}</div>
             <div class="car-specs-large">
               <div class="spec-item">
                 <i class="fas fa-calendar"></i>
-                <span>2023 год</span>
+                <span>{{ fallbackCar()?.year }} год</span>
               </div>
               <div class="spec-item">
                 <i class="fas fa-tachometer-alt"></i>
-                <span>45 000 км</span>
+                <span>{{ fallbackCar()?.mileage }} км</span>
               </div>
               <div class="spec-item">
                 <i class="fas fa-cog"></i>
-                <span>3.0л</span>
+                <span>{{ fallbackCar()?.engine }}л</span>
               </div>
               <div class="spec-item">
                 <i class="fas fa-gas-pump"></i>
-                <span>Бензин</span>
+                <span>{{ fallbackCar()?.fuel }}</span>
               </div>
             </div>
             <div class="car-features">
-              <span class="feature-tag">Полный привод</span>
-              <span class="feature-tag">Автомат</span>
-              <span class="feature-tag">Без ДТП</span>
+              <span class="feature-tag">{{ fallbackCar()?.drive }}</span>
+              <span class="feature-tag">{{ fallbackCar()?.gearbox }}</span>
+              <span class="feature-tag" *ngIf="!fallbackCar()?.isAccident">Без ДТП</span>
             </div>
           </div>
         </div>
@@ -396,7 +399,7 @@
     <div class="stories__grid">
       <article class="story-card" *ngFor="let car of soldRecently(); let i = index">
         <div class="story-card__image">
-          <img [src]="car.images?.[0] || '/assets/placeholder-car.jpg'" [alt]="car.brand + ' ' + car.model" class="story-img" *ngIf="car.images?.[0]; else storyPlaceholder">
+          <img [src]="car.images?.[0]" [alt]="car.brand + ' ' + car.model" class="story-img" *ngIf="car.images?.[0]; else storyPlaceholder">
           <ng-template #storyPlaceholder>
             <div class="story-placeholder">
               <i class="fas fa-car"></i>
