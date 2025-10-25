@@ -117,6 +117,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   }
   
   private connectToChat(sessionId: string) {
+    console.log('Connecting to chat server with sessionId:', sessionId);
     this.socket = io(this.API_URL, {
       transports: ['websocket', 'polling']
     });
@@ -168,7 +169,12 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     if (!this.newMessage.trim()) return;
     
     const session = this.currentSession();
-    if (!session) return;
+    if (!session) {
+      console.log('No current session available');
+      return;
+    }
+    
+    console.log('Sending message with session:', session);
     
     const messageText = this.newMessage.trim();
     const messageData = {
