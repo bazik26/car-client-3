@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { io, Socket } from 'socket.io-client';
 import { FingerprintUtil } from '../../utils/fingerprint.util';
+import { SoundService } from '../../services/sound.service';
 
 interface ChatMessage {
   id?: number;
@@ -45,6 +46,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   isTyping = signal(false);
   messages = signal<ChatMessage[]>([]);
   currentSession = signal<ChatSession | null>(null);
+  soundEnabled = signal(true);
   
   // Форма
   newMessage = '';
@@ -60,9 +62,13 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   private fingerprintUtil = FingerprintUtil.getInstance();
   private userFingerprint: string | null = null;
   
+  // Sound
+  private soundService = inject(SoundService);
+  
   async ngOnInit() {
     await this.initializeFingerprint();
     this.loadUserData();
+    this.checkSoundSettings();
     await this.initializeChat();
   }
   
@@ -287,6 +293,11 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       console.log('Received new message:', message);
       this.messages.update(messages => [...messages, message]);
       this.scrollToBottom();
+      
+      // Воспроизводим звук только для сообщений от админа
+      if (message.senderType === 'admin') {
+        this.soundService.playMessageSound();
+      }
     });
     
     this.socket.on('user-typing', (data: { userType: string; isTyping: boolean }) => {
@@ -337,6 +348,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     
     // Очищаем поле ввода
     this.newMessage = '';
+    
+    // Воспроизводим звук отправки
+    this.soundService.playSendSound();
     
     // Отправляем через WebSocket если доступен
     if (this.socket && this.socket.connected) {
@@ -448,6 +462,17 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       clearInterval(this.pollingInterval);
       this.pollingInterval = null;
     }
+  }
+
+  // Управление звуком
+  toggleSound() {
+    const newState = this.soundService.toggleSound();
+    this.soundEnabled.set(newState);
+  }
+
+  // Проверить настройки звука при инициализации
+  private checkSoundSettings() {
+    this.soundEnabled.set(this.soundService.isSoundEnabled());
   }
   
   private loadMessages(sessionId: string) {

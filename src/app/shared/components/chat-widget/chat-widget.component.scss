@@ -74,6 +74,40 @@
       align-items: center;
       justify-content: space-between;
 
+      .chat-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .sound-toggle {
+          background: rgba(255, 255, 255, 0.2);
+          border: none;
+          color: white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-size: 14px;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+          }
+
+          &.enabled {
+            background: rgba(76, 175, 80, 0.8);
+          }
+
+          &:not(.enabled) {
+            background: rgba(244, 67, 54, 0.8);
+          }
+        }
+      }
+
       .chat-title {
         display: flex;
         align-items: center;
