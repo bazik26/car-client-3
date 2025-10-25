@@ -78,16 +78,31 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       isActive: true
     };
     
-    // Здесь должен быть HTTP запрос к API для создания сессии
-    // Пока используем локальную сессию
-    this.currentSession.set({
-      sessionId,
-      projectSource: 'car-market-client',
-      isActive: true,
-      createdAt: new Date()
-    } as ChatSession);
-    
-    this.connectToChat(sessionId);
+    // Создаем сессию через API
+    fetch(`${this.API_URL}/chat/session`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(sessionData)
+    })
+    .then(response => response.json())
+    .then(session => {
+      console.log('Session created:', session);
+      this.currentSession.set(session);
+      this.connectToChat(sessionId);
+    })
+    .catch(error => {
+      console.error('Error creating session:', error);
+      // Fallback - создаем локальную сессию
+      this.currentSession.set({
+        sessionId,
+        projectSource: 'car-market-client',
+        isActive: true,
+        createdAt: new Date()
+      } as ChatSession);
+      this.connectToChat(sessionId);
+    });
   }
   
   private connectToChat(sessionId: string) {
@@ -125,6 +140,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     this.socket.on('error', (error: any) => {
       console.error('Chat error:', error);
     });
+
+    // Загружаем существующие сообщения
+    this.loadMessages(sessionId);
   }
   
   toggleChat() {
@@ -135,7 +153,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   }
   
   sendMessage() {
-    if (!this.newMessage.trim() || !this.socket) return;
+    if (!this.newMessage.trim()) return;
     
     const session = this.currentSession();
     if (!session) return;
@@ -150,7 +168,29 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       projectSource: 'car-market-client'
     };
     
-    this.socket.emit('send-message', messageData);
+    // Отправляем через WebSocket если доступен
+    if (this.socket) {
+      this.socket.emit('send-message', messageData);
+    } else {
+      // Fallback - отправляем через HTTP
+      fetch(`${this.API_URL}/chat/message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageData)
+      })
+      .then(response => response.json())
+      .then(message => {
+        console.log('Message sent via HTTP:', message);
+        this.messages.update(messages => [...messages, message]);
+        this.scrollToBottom();
+      })
+      .catch(error => {
+        console.error('Error sending message:', error);
+      });
+    }
+    
     this.newMessage = '';
   }
   
@@ -180,6 +220,19 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
   }
   
+  private loadMessages(sessionId: string) {
+    fetch(`${this.API_URL}/chat/messages/${sessionId}`)
+      .then(response => response.json())
+      .then(messages => {
+        console.log('Loaded messages:', messages);
+        this.messages.set(messages);
+        this.scrollToBottom();
+      })
+      .catch(error => {
+        console.error('Error loading messages:', error);
+      });
+  }
+
   private scrollToBottom() {
     setTimeout(() => {
       const chatMessages = document.querySelector('.chat-messages');
