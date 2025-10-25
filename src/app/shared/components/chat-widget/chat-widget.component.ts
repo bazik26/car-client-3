@@ -320,10 +320,12 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     this.newMessage = '';
     
     // Отправляем через WebSocket если доступен
-    if (this.socket) {
+    if (this.socket && this.socket.connected) {
+      console.log('Sending via WebSocket:', messageData);
       this.socket.emit('send-message', messageData);
       // WebSocket вернет сообщение через событие 'new-message'
     } else {
+      console.log('WebSocket not available, using HTTP fallback');
       // Fallback - добавляем сообщение мгновенно и отправляем через HTTP
       const tempMessage = {
         id: Date.now(), // временный ID
@@ -340,6 +342,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       this.messages.update(messages => [...messages, tempMessage]);
       this.scrollToBottom();
       // Fallback - отправляем через HTTP
+      console.log('Sending HTTP request to:', `${this.API_URL}/chat/message`);
+      console.log('Request data:', JSON.stringify(messageData, null, 2));
       fetch(`${this.API_URL}/chat/message`, {
         method: 'POST',
         headers: {
