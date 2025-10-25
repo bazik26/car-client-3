@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { io, Socket } from 'socket.io-client';
+import { FingerprintUtil } from '../../utils/fingerprint.util';
 
 interface ChatMessage {
   id?: number;
@@ -55,9 +56,14 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   private socket: Socket | null = null;
   private readonly API_URL = 'https://car-api-production.up.railway.app'; // Railway API URL
   
-  ngOnInit() {
+  // Fingerprint
+  private fingerprintUtil = FingerprintUtil.getInstance();
+  private userFingerprint: string | null = null;
+  
+  async ngOnInit() {
+    await this.initializeFingerprint();
     this.loadUserData();
-    this.initializeChat();
+    await this.initializeChat();
   }
   
   ngOnDestroy() {
@@ -66,7 +72,31 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     }
   }
   
-  private initializeChat() {
+  private async initializeFingerprint() {
+    try {
+      // Сначала проверяем сохраненный фингерпринт
+      this.userFingerprint = this.fingerprintUtil.getStoredFingerprint();
+      
+      if (!this.userFingerprint) {
+        // Генерируем новый фингерпринт
+        this.userFingerprint = await this.fingerprintUtil.generateFingerprint();
+        this.fingerprintUtil.storeFingerprint(this.userFingerprint);
+        console.log('New fingerprint generated:', this.userFingerprint);
+      } else {
+        console.log('Using stored fingerprint:', this.userFingerprint);
+      }
+    } catch (error) {
+      console.error('Error initializing fingerprint:', error);
+      // Fallback - используем случайный ID
+      this.userFingerprint = 'fp_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+      this.fingerprintUtil.storeFingerprint(this.userFingerprint);
+    }
+  }
+
+  private async initializeChat() {
+    // Загружаем историю чата пользователя
+    await this.loadUserChatHistory();
+    
     // Создаем сессию чата
     this.createChatSession();
   }
@@ -101,6 +131,36 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     }
   }
   
+  private async loadUserChatHistory() {
+    if (!this.userFingerprint) return;
+    
+    try {
+      console.log('Loading chat history for fingerprint:', this.userFingerprint);
+      const response = await fetch(`${this.API_URL}/chat/history/${this.userFingerprint}`);
+      const history = await response.json();
+      
+      if (history.user && history.messages && history.messages.length > 0) {
+        console.log('Chat history loaded:', {
+          user: history.user.id,
+          messagesCount: history.messages.length,
+          sessionsCount: history.sessions.length
+        });
+        
+        // Загружаем сообщения в чат
+        this.messages.set(history.messages);
+        
+        // Если есть активная сессия, используем её
+        const activeSession = history.sessions.find((s: any) => s.isActive);
+        if (activeSession) {
+          this.currentSession.set(activeSession);
+          this.connectToChat(activeSession.sessionId);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+    }
+  }
+
   private checkExistingSession(sessionId: string) {
     // Проверяем, существует ли сессия
     fetch(`${this.API_URL}/chat/session/${sessionId}`)
@@ -123,10 +183,27 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   
   private createChatSession() {
     const sessionId = this.generateSessionId();
-    const sessionData: Partial<ChatSession> = {
+    const sessionData: Partial<ChatSession> & {
+      userFingerprint?: string;
+      userData?: {
+        name?: string;
+        email?: string;
+        phone?: string;
+        ipAddress?: string;
+        userAgent?: string;
+      };
+    } = {
       sessionId,
       projectSource: 'car-market-client',
-      isActive: true
+      isActive: true,
+      userFingerprint: this.userFingerprint || undefined,
+      userData: {
+        name: this.clientName,
+        email: this.clientEmail,
+        phone: this.clientPhone,
+        ipAddress: this.getClientIP(),
+        userAgent: navigator.userAgent
+      }
     };
     
     // Создаем сессию через API
@@ -321,6 +398,11 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   
   private generateSessionId(): string {
     return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+  }
+
+  private getClientIP(): string {
+    // Простой способ получения IP (может не работать в некоторых случаях)
+    return 'unknown';
   }
   
   private loadMessages(sessionId: string) {
