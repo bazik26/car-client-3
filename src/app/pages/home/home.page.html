@@ -1,0 +1,242 @@
+<!-- Привлекательная замануха -->
+<section class="hero-cta luxury-fade-in" *ngIf="bestOffer() || !isLoading()" style="animation-delay: 0.2s;">
+  <div class="container">
+    <div class="hero-cta__content luxury-glow">
+      <div class="hero-cta__badge luxury-shimmer">
+        <i class="fas fa-star"></i>
+        <span>Лучшее предложение недели</span>
+      </div>
+      
+      <!-- Динамическое предложение -->
+      <div *ngIf="bestOffer(); else fallbackOffer">
+        <h2>🚗 {{ bestOffer()?.brand }} {{ bestOffer()?.model }} {{ bestOffer()?.year }} • {{ formatPrice(bestOffer()?.price) }}</h2>
+        <p>{{ getCarFeatures(bestOffer()) }}</p>
+        <div class="hero-cta__actions">
+          <button class="btn-primary glow-primary" routerLink="/catalog">
+            <i class="fas fa-search"></i>
+            Смотреть все авто
+          </button>
+          <button class="btn-ghost" [routerLink]="['/car', bestOffer()?.id]">
+            <i class="fas fa-eye"></i>
+            Подробнее
+          </button>
+        </div>
+      </div>
+      
+      <!-- Fallback предложение из проданных машин -->
+      <ng-template #fallbackOffer>
+        <div *ngIf="fallbackCar(); else staticFallback">
+          <h2>🚗 {{ fallbackCar()?.brand }} {{ fallbackCar()?.model }} {{ fallbackCar()?.year }} • {{ formatPrice(fallbackCar()?.price) }}</h2>
+          <p>{{ getCarFeatures(fallbackCar()) }}</p>
+          <div class="hero-cta__actions">
+            <button class="btn-primary glow-primary" routerLink="/catalog">
+              <i class="fas fa-search"></i>
+              Смотреть все авто
+            </button>
+            <button class="btn-ghost" routerLink="/catalog">
+              <i class="fas fa-phone"></i>
+              Консультация
+            </button>
+          </div>
+        </div>
+        
+        <!-- Статичный fallback если нет проданных машин -->
+        <ng-template #staticFallback>
+          <h2>🚗 BMW X5 2023 • 2.5M ₽</h2>
+          <p>Полный привод • 45,000 км • В наличии в Москве</p>
+          <div class="hero-cta__actions">
+            <button class="btn-primary glow-primary" routerLink="/catalog">
+              <i class="fas fa-search"></i>
+              Смотреть все авто
+            </button>
+            <button class="btn-ghost" routerLink="/catalog">
+              <i class="fas fa-phone"></i>
+              Консультация
+            </button>
+          </div>
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+</section>
+
+<section class="hero luxury-fade-in" id="hero" style="animation-delay: 0.4s;">
+  <div class="container hero__inner">
+    <div class="hero__content glass-card luxury-glow">
+      <span class="hero__label pill luxury-shimmer">Новый взгляд на пригон авто</span>
+      <h1 class="luxury-slide-in" style="animation-delay: 0.6s;">{{ brand.name }} — подбираем автомобили, которые радуют долгие годы</h1>
+      <p class="luxury-slide-in" style="animation-delay: 0.8s;">Прозрачные отчеты, честная стоимость и полный цикл от подбора до постановки на учет. Каждая машина
+        проходит техническую инспекцию и цифровую проверку истории.</p>
+      <div class="hero__actions luxury-scale-in" style="animation-delay: 1s;">
+        <a class="btn-primary luxury-glow" routerLink="/catalog">Перейти в каталог</a>
+        <button class="btn-ghost luxury-glow" type="button" (click)="selectFilter(showcaseFilters[0])">Подбор за 48 часов</button>
+      </div>
+      <div class="hero__stats luxury-fade-in" style="animation-delay: 1.2s;">
+        <div>
+          <strong>312</strong>
+          <span>Авто привезли клиентам в 2024</span>
+        </div>
+        <div>
+          <strong>22 дня</strong>
+          <span>Средний срок доставки от покупки до ключей</span>
+        </div>
+        <div>
+          <strong>98%</strong>
+          <span>Клиентов приходят по рекомендациям</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <div class="halo"></div>
+      <img ngSrc="/assets/hero/gt3.svg" width="650" height="420" alt="Европейский автомобиль" class="hero__image">
+      <div class="hero__card glass-card">
+        <h3>Цифровая проверка</h3>
+        <p>Каждый автомобиль проходит 118 критериев проверки по базе сервисов ЕС и СНГ. Вы получаете готовый
+          аудит в форматах PDF и интерактивной ссылки.</p>
+        <div class="hero__card-stats">
+          <div>
+            <strong>VIN Control</strong>
+            <span>Проверка истории, сервисных обращений, страховых кейсов.</span>
+          </div>
+          <div>
+            <strong>Road Test</strong>
+            <span>Видео-отчет и телеметрия по результатам тест-драйва.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="showcase luxury-fade-in" id="collections" style="animation-delay: 1.4s;">
+  <div class="container">
+    <div class="showcase__header luxury-slide-in" style="animation-delay: 1.6s;">
+      <div>
+        <h2 class="section-title luxury-glow">Подборки, которые мы рекомендуем</h2>
+        <p class="section-subtitle">Выберите сценарий — мы подсветим автомобили, подходящие под ваши задачи.
+          Подбор формируется автоматически в реальном времени.</p>
+      </div>
+      <a class="btn-ghost luxury-glow" routerLink="/catalog">Открыть весь каталог</a>
+    </div>
+
+    <div class="showcase__filters luxury-fade-in" style="animation-delay: 1.8s;">
+      <button
+        *ngFor="let filter of showcaseFilters; let i = index"
+        type="button"
+        class="chip luxury-scale-in luxury-glow"
+        [style.animation-delay]="(1.8 + i * 0.2) + 's'"
+        [class.active]="selectedFilter()?.id === filter.id"
+        (click)="selectFilter(filter)">
+        <span>{{ filter.title }}</span>
+        <small>{{ filter.subtitle }}</small>
+      </button>
+    </div>
+
+    <div class="cards-grid luxury-fade-in" style="animation-delay: 2.2s;" *ngIf="!isLoading() && filteredCars().length > 0; else loadingOrEmpty">
+      <app-car-card *ngFor="let car of filteredCars(); let i = index" 
+                    [car]="car" 
+                    class="luxury-scale-in luxury-float"
+                    [style.animation-delay]="(2.2 + i * 0.1) + 's'"></app-car-card>
+    </div>
+    <ng-template #loadingOrEmpty>
+      <div class="loading" *ngIf="isLoading(); else emptyState">
+        <div class="skeleton luxury-fade-in" *ngFor="let _ of [].constructor(6); let i = index" 
+             [style.animation-delay]="(2.2 + i * 0.1) + 's'"></div>
+      </div>
+      <ng-template #emptyState>
+        <div class="empty-state luxury-fade-in" style="animation-delay: 2.2s;">
+          <div class="empty-state__content glass-card luxury-glow">
+            <i class="fas fa-car" style="font-size: 3rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+            <h3>Автомобили не найдены</h3>
+            <p>Попробуйте изменить фильтры или загрузить каталог заново</p>
+            <button class="btn-primary luxury-glow" (click)="selectFilter(showcaseFilters[0])">
+              <i class="fas fa-refresh"></i>
+              Обновить
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</section>
+
+<section class="why-us luxury-fade-in" id="why-us" style="animation-delay: 3.4s;">
+  <div class="container why-us__grid">
+    <div class="glass-card why-us__card luxury-glow luxury-slide-in" style="animation-delay: 3.6s;">
+      <h3 class="luxury-glow">Почему клиенты доверяют Prime Auto</h3>
+      <p>Мы соединяем классический подход к покупке авто и современные цифровые инструменты, чтобы сделать путь к
+        новой машине понятным и безопасным.</p>
+      <ul>
+        <li>
+          <strong>Финансовая прозрачность</strong>
+          <span>Фиксируем стоимость в договоре, все платежи проходят официально.</span>
+        </li>
+        <li>
+          <strong>Экспертная инспекция</strong>
+          <span>Инженеры с опытом работы в дилерских центрах составляют техническое заключение.</span>
+        </li>
+        <li>
+          <strong>Люди и сервис</strong>
+          <span>Персональный менеджер на связи 24/7, помощь с trade-in и кредитом партнёров.</span>
+        </li>
+      </ul>
+    </div>
+    <div class="why-us__gallery luxury-fade-in" style="animation-delay: 3.8s;">
+      <figure class="glass-card luxury-glow luxury-scale-in" style="animation-delay: 4s;">
+        <img ngSrc="/assets/hero/team.svg" alt="Команда Prime Auto" width="540" height="320">
+        <figcaption>Команда Prime Auto на осмотре Mercedes-Benz EQE</figcaption>
+      </figure>
+      <div class="why-us__insight glass-card luxury-glow luxury-scale-in" style="animation-delay: 4.2s;">
+        <strong class="luxury-glow">+17%</strong>
+        <span>Авто с гарантией от производителя благодаря работе с официальными партнёрами.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="popular luxury-fade-in" style="animation-delay: 2.6s;">
+  <div class="container">
+    <h2 class="section-title luxury-glow luxury-slide-in" style="animation-delay: 2.8s;">Живой каталог</h2>
+    <p class="section-subtitle luxury-slide-in" style="animation-delay: 3s;">Алгоритм собирает автомобили из базы, проверяет актуальность и показывает только то,
+      что доступно прямо сейчас.</p>
+    <div class="cards-grid luxury-fade-in" style="animation-delay: 3.2s;">
+      <app-car-card *ngFor="let car of popular(); let i = index" 
+                    [car]="car" 
+                    class="luxury-scale-in luxury-float"
+                    [style.animation-delay]="(3.2 + i * 0.1) + 's'"></app-car-card>
+    </div>
+  </div>
+</section>
+
+<section class="stories luxury-fade-in" style="animation-delay: 3.6s;" *ngIf="soldRecently().length">
+  <div class="container stories__grid">
+    <div class="stories__intro glass-card luxury-glow luxury-slide-in" style="animation-delay: 3.8s;">
+      <h3 class="luxury-glow">Свежие истории клиентов</h3>
+      <p>Короткие заметки о том, как проходит путь от запроса до выдачи ключей. Каждая история — живое подтверждение
+        процесса.</p>
+      <a class="btn-primary luxury-glow" routerLink="/contacts">Получить консультацию</a>
+    </div>
+    <div class="stories__list luxury-fade-in" style="animation-delay: 4s;">
+      <article class="glass-card luxury-scale-in luxury-glow" 
+                *ngFor="let car of soldRecently(); let i = index"
+                [style.animation-delay]="(4 + i * 0.15) + 's'">
+        <header>
+          <span>{{ car.brand }} {{ car.model }}</span>
+          <small>{{ car.year }}</small>
+        </header>
+        <p>Доставили за {{ 12 + (car.id % 7) }} дней. Клиент получил выгоду {{ (car.price * 0.07) | number:'1.0-0' }} ₽
+          по сравнению с рынком РФ.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cta luxury-fade-in" id="contact-form" style="animation-delay: 4.4s;">
+  <div class="container glass-card cta__inner luxury-glow luxury-scale-in" style="animation-delay: 4.6s;">
+    <div class="luxury-slide-in" style="animation-delay: 4.8s;">
+      <h2 class="luxury-glow">Расскажите о вашем автомобиле мечты</h2>
+      <p>Укажите три параметра — и в течение суток мы подготовим прозрачные предложения с расчётом пошлин и доставки.</p>
+    </div>
+    <a class="btn-primary luxury-glow luxury-scale-in" style="animation-delay: 5s;" routerLink="/contacts">Оставить заявку</a>
+  </div>
+</section>

@@ -1,0 +1,68 @@
+.city {
+  padding: 40px 0 100px;
+
+  &__header {
+    padding: 32px;
+
+    h1 {
+      margin: 16px 0 12px;
+      font-size: clamp(2rem, 1.6rem + 1vw, 2.5rem);
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--color-text-muted);
+      max-width: 540px;
+    }
+  }
+
+  &__content {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  &__timeline {
+    padding: 28px;
+
+    h2 {
+      margin: 0 0 16px;
+    }
+
+    ol {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 14px;
+
+      li {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        strong {
+          font-size: 1rem;
+        }
+
+        span {
+          color: var(--color-text-muted);
+          font-size: 0.9rem;
+          line-height: 1.6;
+        }
+      }
+    }
+  }
+
+  &__cars {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 992px) {
+  .city__content {
+    grid-template-columns: 1fr;
+  }
+}

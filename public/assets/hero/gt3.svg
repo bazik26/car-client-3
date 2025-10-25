@@ -1,0 +1,24 @@
+<svg width="720" height="460" viewBox="0 0 720 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="460" rx="48" fill="#101726"/>
+  <path d="M120 320C120 292.386 142.386 270 170 270H540C567.614 270 590 292.386 590 320V326C590 353.614 567.614 376 540 376H170C142.386 376 120 353.614 120 326V320Z" fill="#1A2335"/>
+  <path d="M170 210H520C548.719 210 575.06 226.297 588.149 251.769L552 257C532.401 259.852 513.105 244.859 507 226C501.082 207.785 486.179 195 468.132 195H221.868C203.821 195 188.918 207.785 183 226L147 251.769C160.09 226.297 186.431 210 215.149 210H170Z" fill="#212E46"/>
+  <circle cx="250" cy="350" r="48" fill="#0C111C" stroke="#4F8CFF" stroke-width="10"/>
+  <circle cx="480" cy="350" r="48" fill="#0C111C" stroke="#4F8CFF" stroke-width="10"/>
+  <rect x="275" y="232" width="170" height="30" rx="15" fill="#0C111C" stroke="#61DEA3" stroke-opacity="0.5" stroke-width="4"/>
+  <g filter="url(#glow)">
+    <ellipse cx="360" cy="156" rx="220" ry="96" fill="url(#paint0)" fill-opacity="0.45"/>
+  </g>
+  <path d="M230 142H490L540 198H180L230 142Z" stroke="#4F8CFF" stroke-width="2" stroke-linejoin="round" stroke-dasharray="12 12"/>
+  <text x="50%" y="112" dominant-baseline="middle" text-anchor="middle" fill="#61DEA3" font-family="'Manrope', sans-serif" font-size="34" font-weight="600">Prime Auto — Intelligent Import</text>
+  <defs>
+    <filter id="glow" x="80" y="40" width="560" height="232" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="30" result="effect1_foregroundBlur"/>
+    </filter>
+    <linearGradient id="paint0" x1="140" y1="156" x2="580" y2="156" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#61DEA3"/>
+      <stop offset="1" stop-color="#4F8CFF"/>
+    </linearGradient>
+  </defs>
+</svg>

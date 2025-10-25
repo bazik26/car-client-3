@@ -1,0 +1,9 @@
+<svg width="640" height="400" viewBox="0 0 640 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="400" rx="32" fill="#151C2B"/>
+  <path d="M116 250C116 225.147 136.147 205 161 205H480C504.853 205 525 225.147 525 250V260C525 284.853 504.853 305 480 305H161C136.147 305 116 284.853 116 260V250Z" fill="#1F2A3F"/>
+  <path d="M162 213H475C495.986 213 515.303 224.393 525 242L491 247C474.431 249.393 458.076 235.908 453 219C450.84 211.798 444.209 207 436.648 207H208.352C200.791 207 194.16 211.798 192 219C186.924 235.908 170.569 249.393 154 247L120 242C129.697 224.393 149.014 213 170 213Z" fill="#24304A"/>
+  <circle cx="200" cy="274" r="32" fill="#0E1421" stroke="#4F8CFF" stroke-width="6"/>
+  <circle cx="441" cy="274" r="32" fill="#0E1421" stroke="#4F8CFF" stroke-width="6"/>
+  <rect x="234" y="210" width="159" height="20" rx="10" fill="#0E1421" stroke="#4F8CFF" stroke-opacity="0.5"/>
+  <text x="50%" y="160" dominant-baseline="middle" text-anchor="middle" fill="#4F8CFF" font-family="'Manrope', sans-serif" font-size="32" font-weight="600">Изображение обновится</text>
+</svg>

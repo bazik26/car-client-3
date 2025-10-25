@@ -1,0 +1,105 @@
+<section class="catalog">
+  <div class="container catalog__layout" [formGroup]="filters">
+    <aside class="catalog__filters glass-card">
+      <header>
+        <h1>Каталог</h1>
+        <p>Комбинируйте фильтры — подбор обновляется без перезагрузки.</p>
+      </header>
+
+      <div class="field">
+        <label for="brand">Марка</label>
+        <select id="brand" formControlName="brand">
+          <option [ngValue]="null">Любая</option>
+          <option *ngFor="let brand of brands()" [value]="brand.title">
+            {{ brand.title }} ({{ brand.count }})
+          </option>
+        </select>
+      </div>
+
+      <div class="field sliders">
+        <label>Бюджет, ₽</label>
+        <div class="range">
+          <input type="range" min="1000000" max="8000000" step="100000" formControlName="priceMax">
+          <div class="range__value">до {{ filters.value.priceMax | number:'1.0-0' }}</div>
+        </div>
+      </div>
+
+      <div class="field sliders">
+        <label>Пробег, км</label>
+        <div class="range">
+          <input type="range" min="0" max="200000" step="5000" formControlName="mileageMax">
+          <div class="range__value">до {{ filters.value.mileageMax | number }}</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Класс автомобиля</label>
+        <div class="chips">
+          <button type="button"
+                  *ngFor="let preset of lifestylePresets"
+                  class="chip"
+                  [class.active]="filters.value.lifestyle?.includes(preset.id)"
+                  (click)="togglePreset(preset)">
+            <span>{{ preset.title }}</span>
+            <small>{{ preset.tag }}</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Топливо</label>
+        <div class="checkbox-grid">
+          <label *ngFor="let option of ['Бензин', 'Дизель', 'Электро', 'Гибрид', 'Газ']">
+            <input type="checkbox"
+                   [checked]="isSelected('fuel', option)"
+                   (change)="toggleMulti('fuel', option, $event.target.checked)"> {{ option }}
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Привод</label>
+        <div class="checkbox-grid">
+          <label *ngFor="let option of ['Полный', 'Передний', 'Задний']">
+            <input type="checkbox"
+                   [checked]="isSelected('drive', option)"
+                   (change)="toggleMulti('drive', option, $event.target.checked)"> {{ option }}
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Коробка</label>
+        <div class="checkbox-grid">
+          <label *ngFor="let option of ['Автомат', 'Вариатор', 'Робот', 'Механика']">
+            <input type="checkbox"
+                   [checked]="isSelected('gearbox', option)"
+                   (change)="toggleMulti('gearbox', option, $event.target.checked)"> {{ option }}
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-ghost" type="button" (click)="resetFilters()">Сбросить фильтры</button>
+    </aside>
+
+    <section class="catalog__results">
+      <header class="catalog__results-header">
+        <div>
+          <h2>Найденные автомобили</h2>
+          <p *ngIf="!isLoading()">{{ cars().length }} автомобилей соответствует фильтрам</p>
+        </div>
+        <a class="btn-primary" routerLink="/contacts">Получить индивидуальное предложение</a>
+      </header>
+
+      <div class="cards-grid" *ngIf="!isLoading(); else loading">
+        <app-car-card *ngFor="let car of cars()" [car]="car"></app-car-card>
+      </div>
+
+      <ng-template #loading>
+        <div class="loading">
+          <div class="skeleton" *ngFor="let _ of [].constructor(6)"></div>
+        </div>
+      </ng-template>
+    </section>
+  </div>
+</section>

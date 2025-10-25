@@ -1,0 +1,68 @@
+<section class="contacts">
+  <div class="container contacts__layout">
+    <div class="contacts__info glass-card">
+      <span class="pill">Связаться с нами</span>
+      <h1>Prime Auto Hub</h1>
+      <p>Расскажите о задаче — и мы подготовим прозрачный план с бюджетом и сроками. Менеджер свяжется в течение
+        60 минут в рабочее время.</p>
+
+      <div class="contacts__meta">
+        <div>
+          <h3>Телефон</h3>
+          <a [href]="brand.phoneLink">{{ brand.phone }}</a>
+        </div>
+        <div>
+          <h3>Email</h3>
+          <a [href]="'mailto:' + brand.email">{{ brand.email }}</a>
+        </div>
+        <div>
+          <h3>Адрес</h3>
+          <p>{{ brand.address }}</p>
+        </div>
+      </div>
+    </div>
+
+    <form class="contacts__form glass-card" [formGroup]="form" (ngSubmit)="submit()">
+      <h2>Опишите ваш автомобиль</h2>
+      <div class="grid">
+        <label>
+          Имя
+          <input type="text" formControlName="firstName" placeholder="Алексей">
+        </label>
+        <label>
+          Телефон
+          <input type="tel" formControlName="phone" placeholder="+7 (999) 000-00-00">
+        </label>
+        <label>
+          Email
+          <input type="email" formControlName="email" placeholder="you@example.com">
+        </label>
+        <label>
+          Удобный способ связи
+          <select formControlName="messenger">
+            <option>Телефон</option>
+            <option>Telegram</option>
+            <option>WhatsApp</option>
+            <option>Email</option>
+          </select>
+        </label>
+      </div>
+      <label>
+        Комментарий
+        <textarea formControlName="message" rows="4" placeholder="Например: BMW X5 до 3.5 млн, пробег до 80 тыс."></textarea>
+      </label>
+
+      <button class="btn-primary" type="submit" [disabled]="sending">
+        {{ sending ? 'Отправляем...' : 'Отправить заявку' }}
+      </button>
+
+      <p class="contacts__policy">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных и политикой
+        конфиденциальности.</p>
+
+      <div class="contacts__success" *ngIf="sent">
+        <strong>Спасибо!</strong>
+        <span>Мы получили вашу заявку и уже подбираем варианты.</span>
+      </div>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="420" rx="36" fill="#161E2D"/>
+  <path d="M72 304C72 267.817 101.817 238 138 238H502C538.183 238 568 267.817 568 304V312C568 348.183 538.183 378 502 378H138C101.817 378 72 348.183 72 312V304Z" fill="#1E293D"/>
+  <rect x="108" y="86" width="424" height="214" rx="26" fill="#1B2537" stroke="#404B63" stroke-width="2"/>
+  <rect x="144" y="122" width="352" height="142" rx="22" fill="#232F45"/>
+  <g opacity="0.88">
+    <circle cx="216" cy="194" r="46" fill="#61DEA3"/>
+    <circle cx="320" cy="194" r="46" fill="#4F8CFF"/>
+    <circle cx="424" cy="194" r="46" fill="#6F74F5"/>
+  </g>
+  <path d="M196 278C196 256.126 213.126 239 235 239H405C426.874 239 444 256.126 444 278V302H196V278Z" fill="#202A3F"/>
+  <text x="50%" y="74" dominant-baseline="middle" text-anchor="middle" fill="#61DEA3" font-family="'Manrope', sans-serif" font-size="30" font-weight="600">Команда Prime Auto на аудите</text>
+  <text x="140" y="338" fill="#EEF0F8" font-family="'Manrope', sans-serif" font-size="18" font-weight="600">Мюнхен → Москва</text>
+  <text x="140" y="364" fill="#9099B2" font-family="'Manrope', sans-serif" font-size="14">Осмотр Porsche Taycan Turbo S, программа «Premium Electric»</text>
+</svg>

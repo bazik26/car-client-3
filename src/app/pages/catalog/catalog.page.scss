@@ -1,0 +1,239 @@
+.catalog {
+  padding: 40px 0 80px;
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 32px;
+  }
+
+  &__filters {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      h1 {
+        margin: 0;
+      }
+
+      p {
+        margin: 0;
+        color: var(--color-text-muted);
+      }
+    }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    label {
+      font-weight: 600;
+    }
+  }
+
+  select {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text);
+    padding: 12px 14px;
+    font-size: 1rem;
+    appearance: none;
+  }
+
+  .chips {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+
+    .chip {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+
+      small {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+      }
+    }
+  }
+
+  .checkbox-grid {
+    display: grid;
+    gap: 8px 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    label {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--color-text-muted);
+      font-size: 0.92rem;
+    }
+
+    input[type='checkbox'] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--color-primary);
+    }
+  }
+
+  .sliders {
+    .range {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      input[type='range'] {
+        width: 100%;
+        accent-color: var(--color-primary);
+      }
+
+      &__value {
+        font-size: 0.9rem;
+        color: var(--color-text-muted);
+      }
+    }
+  }
+
+  &__results {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__results-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    p {
+      margin: 0;
+      color: var(--color-text-muted);
+    }
+  }
+}
+
+.loading {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  .skeleton {
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite;
+  }
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: 0 0; }
+}
+
+@media (max-width: 1024px) {
+  .catalog__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .catalog {
+    padding: 24px 0 60px;
+
+    &__layout {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    &__filters {
+      padding: 20px;
+      gap: 16px;
+      position: relative;
+      top: 0;
+      z-index: 1;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+      background: rgba(20, 26, 38, 0.8);
+
+      header {
+        gap: 8px;
+
+        h1 {
+          font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2rem);
+        }
+
+        p {
+          font-size: 0.95rem;
+        }
+      }
+    }
+
+    .field {
+      gap: 8px;
+
+      label {
+        font-size: 0.9rem;
+      }
+    }
+
+    select {
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      min-height: 48px;
+      border-radius: var(--radius-sm);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog {
+    padding: 20px 0 48px;
+
+    &__filters {
+      padding: 16px;
+      gap: 14px;
+      top: 70px;
+
+      header {
+        h1 {
+          font-size: clamp(1.4rem, 1.1rem + 1vw, 1.8rem);
+        }
+
+        p {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .field {
+      gap: 6px;
+
+      label {
+        font-size: 0.85rem;
+      }
+    }
+
+    select {
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      min-height: 44px;
+    }
+  }
+}

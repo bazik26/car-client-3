@@ -1,0 +1,30 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0D1018"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#paint0_radial_1_2)" fill-opacity="0.6"/>
+  <g filter="url(#filter0_d_1_2)">
+    <rect x="156" y="128" width="888" height="374" rx="46" fill="#151D2D"/>
+    <rect x="156" y="128" width="888" height="374" rx="46" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
+  </g>
+  <text x="50%" y="48%" text-anchor="middle" fill="#F3F7FF" font-family="'Manrope', sans-serif" font-size="64" font-weight="700">Prime Auto Hub</text>
+  <text x="50%" y="57%" text-anchor="middle" fill="#61DEA3" font-family="'Manrope', sans-serif" font-size="28" font-weight="500">Европейские автомобили с проверенной историей</text>
+  <g transform="translate(330,360)">
+    <rect x="0" y="0" width="540" height="120" rx="28" fill="#162034" stroke="rgba(255,255,255,0.08)"/>
+    <text x="270" y="45" text-anchor="middle" fill="#4F8CFF" font-family="'Manrope', sans-serif" font-size="28" font-weight="600">Подбор · Проверка · Логистика · Гарантия</text>
+    <text x="270" y="82" text-anchor="middle" fill="rgba(243,247,255,0.7)" font-family="'Manrope', sans-serif" font-size="20">prime-autos.ru</text>
+  </g>
+  <defs>
+    <filter id="filter0_d_1_2" x="116" y="98" width="968" height="454" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="14"/>
+      <feOffset dy="12"/>
+      <feComposite in2="SourceAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.04 0 0 0 0 0.08 0 0 0 0 0.16 0 0 0 0.4 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/>
+    </filter>
+    <radialGradient id="paint0_radial_1_2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1200 0) rotate(135) scale(1260 880)">
+      <stop stop-color="#4F8CFF" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#0D1018" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

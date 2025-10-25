@@ -1,0 +1,42 @@
+<section class="city" *ngIf="city() as current">
+  <div class="container city__header glass-card">
+    <div>
+      <span class="pill">Пригон авто в {{ current.name }}</span>
+      <h1>{{ current.name }} и {{ current.region }}</h1>
+      <p>Prime Auto организует подбор, проверку и доставку автомобилей из Европы в {{ current.name }}. Мы берём на
+        себя логистику, документы и растаможку.</p>
+      <a class="btn-primary" routerLink="/contacts">Получить расчёт доставки</a>
+    </div>
+  </div>
+
+  <div class="container city__content">
+    <section class="glass-card city__timeline">
+      <h2>Как проходит пригон</h2>
+      <ol>
+        <li>
+          <strong>Заявка и подбор</strong>
+          <span>Фиксируем бюджет и требования, показываем 3–5 вариантов с прозрачной историей.</span>
+        </li>
+        <li>
+          <strong>Инспекция и сделка</strong>
+          <span>Проводим технический осмотр, готовим отчёт и бронируем автомобиль.</span>
+        </li>
+        <li>
+          <strong>Логистика</strong>
+          <span>Доставляем по маршруту Европа → {{ current.name }}, проходим таможню.</span>
+        </li>
+        <li>
+          <strong>Выдача и регистрация</strong>
+          <span>Передаём автомобиль, помогаем с постановкой на учёт и гарантией.</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="city__cars">
+      <h2>Автомобили, которые мы рекомендуем</h2>
+      <div class="cards-grid">
+        <app-car-card *ngFor="let car of cars()" [car]="car"></app-car-card>
+      </div>
+    </section>
+  </div>
+</section>

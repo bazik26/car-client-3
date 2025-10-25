@@ -1,0 +1,122 @@
+.contacts {
+  padding: 60px 0 120px;
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  &__info {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 1.5rem + 1vw, 2.6rem);
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+  }
+
+  &__meta {
+    display: grid;
+    gap: 20px;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      h3 {
+        margin: 0;
+      }
+
+      a,
+      p {
+        color: var(--color-text-muted);
+        margin: 0;
+      }
+    }
+  }
+
+  &__form {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    h2 {
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--color-text-muted);
+      font-size: 0.92rem;
+
+      input,
+      textarea,
+      select {
+        margin-top: 4px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        padding: 12px 14px;
+        color: var(--color-text);
+        font-size: 1rem;
+        font-family: inherit;
+      }
+
+      textarea {
+        resize: vertical;
+      }
+    }
+
+    button {
+      align-self: flex-start;
+      margin-top: 8px;
+    }
+  }
+
+  &__policy {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+  }
+
+  &__success {
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(97, 222, 163, 0.16);
+    color: var(--color-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 900px) {
+  .contacts__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contacts__form .grid {
+    grid-template-columns: 1fr;
+  }
+}

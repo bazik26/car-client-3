@@ -1,0 +1,38 @@
+<a class="car-card glass-card" [routerLink]="['/cars', car.id]">
+  <div class="car-card__image">
+    <img [ngSrc]="heroImage()" [alt]="car.brand + ' ' + car.model" class="car-card__media" width="400" height="300">
+    <div class="car-card__top">
+      <span class="pill" *ngIf="car.drive">{{ car.drive }}</span>
+      <span class="pill" *ngIf="car.gearbox">{{ car.gearbox }}</span>
+    </div>
+    <span class="car-card__badge" *ngIf="badge()" [attr.data-tone]="badge()?.tone">{{ badge()?.text }}</span>
+  </div>
+
+  <div class="car-card__body">
+    <div>
+      <h3>{{ car.brand }} {{ car.model }}</h3>
+      <p class="car-card__spec">{{ formatSpec(car) }}</p>
+    </div>
+
+    <div class="car-card__price">
+      <span>{{ car.price | currency:'RUB':'symbol-narrow':'1.0-0' }}</span>
+      <small>С доставкой и оформлением</small>
+    </div>
+
+    <div class="car-card__meta">
+      <div>
+        <span>Пробег</span>
+        <strong *ngIf="car.mileage; else mileageUnknown">{{ car.mileage | number }} км</strong>
+        <ng-template #mileageUnknown><strong>не указан</strong></ng-template>
+      </div>
+      <div>
+        <span>Топливо</span>
+        <strong>{{ car.fuel || 'не указано' }}</strong>
+      </div>
+      <div>
+        <span>Руль</span>
+        <strong>{{ car.powerSteering || 'адаптируем' }}</strong>
+      </div>
+    </div>
+  </div>
+</a>

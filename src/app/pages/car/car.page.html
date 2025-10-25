@@ -1,0 +1,99 @@
+<section class="car" *ngIf="car() as current">
+  <div class="container car__header">
+    <div>
+      <a routerLink="/catalog" class="car__breadcrumb">← Вернуться к каталогу</a>
+      <h1>{{ current.brand }} {{ current.model }} {{ current.year }}</h1>
+      <p>{{ current.description || 'Автомобиль прошёл комплексную проверку и готов к доставке.' }}</p>
+    </div>
+    <div class="car__pricing glass-card">
+      <span class="car__pricing-label">Стоимость под ключ</span>
+      <strong>{{ current.price | currency:'RUB':'symbol-narrow':'1.0-0' }}</strong>
+      <div class="car__pricing-meta">
+        <span>С учётом доставки и растаможки</span>
+        <span>Можно зарезервировать на 3 дня</span>
+      </div>
+      <a class="btn-primary" routerLink="/contacts">Забронировать автомобиль</a>
+    </div>
+  </div>
+
+  <div class="container car__gallery">
+    <div class="car__gallery-main glass-card">
+      <img [ngSrc]="heroImage()" width="940" height="540" alt="{{ current.brand }} {{ current.model }}" class="car__gallery-image">
+    </div>
+    <div class="car__gallery-thumbs">
+      <button type="button"
+              *ngFor="let image of gallery(); let idx = index"
+              [class.active]="idx === activeImage()"
+              (click)="selectImage(idx)">
+        <img [ngSrc]="image" width="220" height="140" alt="{{ current.brand }}">
+      </button>
+    </div>
+  </div>
+
+  <div class="container car__meta">
+    <section class="glass-card car__specs">
+      <header>
+        <h2>Технический паспорт</h2>
+        <span>ID #{{ current.id }}</span>
+      </header>
+      <div class="car__specs-grid">
+        <div>
+          <span>Кузов</span>
+          <strong>{{ current.bodyType || 'седан / хэтчбек' }}</strong>
+        </div>
+        <div>
+          <span>Двигатель</span>
+          <strong>{{ current.engine ? (current.engine + ' л') : 'не указан' }}</strong>
+        </div>
+        <div>
+          <span>Мощность</span>
+          <strong>{{ current.powerValue ? (current.powerValue + ' л.с.') : '—' }}</strong>
+        </div>
+        <div>
+          <span>Коробка</span>
+          <strong>{{ current.gearbox || '—' }}</strong>
+        </div>
+        <div>
+          <span>Привод</span>
+          <strong>{{ current.drive || '—' }}</strong>
+        </div>
+        <div>
+          <span>Пробег</span>
+          <strong>{{ current.mileage ? (current.mileage | number) + ' км' : '—' }}</strong>
+        </div>
+        <div>
+          <span>VIN</span>
+          <strong>{{ current.vin || 'уточняется перед сделкой' }}</strong>
+        </div>
+        <div>
+          <span>Дата обновления</span>
+          <strong>{{ current.updatedAt | date:'d MMMM yyyy' }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card car__features" *ngIf="featureGroups().length">
+      <h2>Опции и комплектация</h2>
+      <div class="car__feature-group" *ngFor="let group of featureGroups()">
+        <h3>{{ group.title }}</h3>
+        <ul>
+          <li *ngFor="let feature of group.features">{{ feature }}</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <div class="container car__cta glass-card">
+    <div>
+      <h2>Хотите такой же автомобиль?</h2>
+      <p>Подготовим индивидуальные варианты, расчёт доставки и прозрачный бюджет. Менеджер свяжется в течение часа.</p>
+    </div>
+    <div class="car__cta-contacts">
+      <a class="btn-primary" routerLink="/contacts">Связаться с нами</a>
+      <div>
+        <span>{{ brand.phone }}</span>
+        <span>{{ brand.email }}</span>
+      </div>
+    </div>
+  </div>
+</section>
