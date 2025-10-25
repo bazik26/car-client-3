@@ -1,5 +1,5 @@
 # Multi-stage build for Angular SSR with Nginx
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -19,8 +19,8 @@ RUN npm run build
 # Production stage with Nginx
 FROM nginx:alpine AS production
 
-# Install Node.js 20 for SSR
-RUN apk add --no-cache nodejs=20 npm
+# Install Node.js for SSR
+RUN apk add --no-cache nodejs npm
 
 # Set working directory
 WORKDIR /app
