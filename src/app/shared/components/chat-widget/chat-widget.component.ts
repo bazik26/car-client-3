@@ -79,6 +79,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     };
     
     // Создаем сессию через API
+    console.log('Creating session with data:', sessionData);
+    console.log('API URL:', `${this.API_URL}/chat/session`);
+    
     fetch(`${this.API_URL}/chat/session`, {
       method: 'POST',
       headers: {
@@ -86,14 +89,22 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       },
       body: JSON.stringify(sessionData)
     })
-    .then(response => response.json())
+    .then(response => {
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then(session => {
-      console.log('Session created:', session);
+      console.log('Session created successfully:', session);
       this.currentSession.set(session);
       this.connectToChat(sessionId);
     })
     .catch(error => {
       console.error('Error creating session:', error);
+      console.log('Falling back to local session');
       // Fallback - создаем локальную сессию
       this.currentSession.set({
         sessionId,
