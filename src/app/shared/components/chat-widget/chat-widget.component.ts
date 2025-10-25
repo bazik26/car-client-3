@@ -138,6 +138,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     });
     
     this.socket.on('new-message', (message: ChatMessage) => {
+      console.log('Received new message:', message);
       this.messages.update(messages => [...messages, message]);
       this.scrollToBottom();
     });
@@ -169,15 +170,35 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     const session = this.currentSession();
     if (!session) return;
     
+    const messageText = this.newMessage.trim();
     const messageData = {
       sessionId: session.sessionId,
-      message: this.newMessage.trim(),
+      message: messageText,
       senderType: 'client' as const,
       clientName: this.clientName || 'Аноним',
       clientEmail: this.clientEmail,
       clientPhone: this.clientPhone,
       projectSource: 'car-market-client'
     };
+    
+    // Сначала добавляем сообщение в интерфейс для мгновенного отображения
+    const tempMessage = {
+      id: Date.now(), // временный ID
+      sessionId: session.sessionId,
+      message: messageText,
+      senderType: 'client' as const,
+      clientName: this.clientName || 'Аноним',
+      clientEmail: this.clientEmail,
+      clientPhone: this.clientPhone,
+      createdAt: new Date(),
+      isRead: false
+    };
+    
+    this.messages.update(messages => [...messages, tempMessage]);
+    this.scrollToBottom();
+    
+    // Очищаем поле ввода
+    this.newMessage = '';
     
     // Отправляем через WebSocket если доступен
     if (this.socket) {
@@ -194,15 +215,19 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       .then(response => response.json())
       .then(message => {
         console.log('Message sent via HTTP:', message);
-        this.messages.update(messages => [...messages, message]);
+        // Заменяем временное сообщение на реальное
+        this.messages.update(messages => {
+          const filtered = messages.filter(m => m.id !== tempMessage.id);
+          return [...filtered, message];
+        });
         this.scrollToBottom();
       })
       .catch(error => {
         console.error('Error sending message:', error);
+        // Удаляем временное сообщение при ошибке
+        this.messages.update(messages => messages.filter(m => m.id !== tempMessage.id));
       });
     }
-    
-    this.newMessage = '';
   }
   
   onTyping() {
