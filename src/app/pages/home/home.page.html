@@ -141,7 +141,7 @@
     <div class="best-offer__content" *ngIf="bestOffer(); else fallbackOffer">
       <div class="best-offer__car">
         <div class="car-image-large">
-          <img [src]="bestOffer()?.images?.[0] || '/assets/cars/default.jpg" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" class="car-img-large">
+          <img [src]="bestOffer()?.images?.[0] || '/assets/cars/default.jpg'" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" class="car-img-large">
           <div class="car-badge-large">Лучшая цена</div>
         </div>
         <div class="car-details">
@@ -379,7 +379,7 @@
     <div class="stories__grid">
       <article class="story-card" *ngFor="let car of soldRecently(); let i = index">
         <div class="story-card__image">
-          <img [src]="car.images?.[0] || '/assets/cars/default.jpg" [alt]="car.brand + ' ' + car.model" class="story-img">
+          <img [src]="car.images?.[0] || '/assets/cars/default.jpg'" [alt]="car.brand + ' ' + car.model" class="story-img">
           <div class="story-badge">Продано</div>
         </div>
         <div class="story-card__content">

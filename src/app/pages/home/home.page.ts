@@ -1,4 +1,4 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { take } from 'rxjs';
@@ -19,7 +19,7 @@ interface ShowcaseFilter {
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, NgOptimizedImage, CarCardComponent],
+  imports: [CommonModule, RouterLink, CarCardComponent],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
