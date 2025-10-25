@@ -212,7 +212,13 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
         },
         body: JSON.stringify(messageData)
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log('HTTP response status:', response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(message => {
         console.log('Message sent via HTTP:', message);
         // Заменяем временное сообщение на реальное
@@ -224,8 +230,11 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       })
       .catch(error => {
         console.error('Error sending message:', error);
+        console.error('Error details:', error.message);
         // Удаляем временное сообщение при ошибке
         this.messages.update(messages => messages.filter(m => m.id !== tempMessage.id));
+        // Показываем уведомление об ошибке
+        alert('Ошибка отправки сообщения. Попробуйте еще раз.');
       });
     }
   }
@@ -257,8 +266,15 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   }
   
   private loadMessages(sessionId: string) {
+    console.log('Loading messages for session:', sessionId);
     fetch(`${this.API_URL}/chat/messages/${sessionId}`)
-      .then(response => response.json())
+      .then(response => {
+        console.log('Messages response status:', response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(messages => {
         console.log('Loaded messages:', messages);
         this.messages.set(messages);
@@ -266,6 +282,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       })
       .catch(error => {
         console.error('Error loading messages:', error);
+        console.error('Error details:', error.message);
+        // Устанавливаем пустой массив при ошибке
+        this.messages.set([]);
       });
   }
 
