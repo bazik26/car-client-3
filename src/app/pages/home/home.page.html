@@ -63,44 +63,97 @@
 <section class="hero luxury-fade-in" id="hero" style="animation-delay: 0.4s;">
   <div class="container hero__inner">
     <div class="hero__content glass-card luxury-glow">
-      <span class="hero__label pill luxury-shimmer">Новый взгляд на пригон авто</span>
-      <h1 class="luxury-slide-in" style="animation-delay: 0.6s;">{{ brand.name }} — подбираем автомобили, которые радуют долгие годы</h1>
-      <p class="luxury-slide-in" style="animation-delay: 0.8s;">Прозрачные отчеты, честная стоимость и полный цикл от подбора до постановки на учет. Каждая машина
-        проходит техническую инспекцию и цифровую проверку истории.</p>
+      <div class="hero__badge luxury-shimmer">
+        <i class="fas fa-rocket"></i>
+        <span>Премиум автоподбор из Европы</span>
+      </div>
+      <h1 class="luxury-slide-in" style="animation-delay: 0.6s;">
+        <span class="hero__title-main">Найдем вашу</span>
+        <span class="hero__title-accent">идеальную машину</span>
+        <span class="hero__title-sub">за 14 дней</span>
+      </h1>
+      <p class="luxury-slide-in" style="animation-delay: 0.8s;">
+        Эксклюзивный подбор автомобилей из Германии, Франции и Италии. 
+        Полная проверка истории, техническая инспекция и гарантия качества. 
+        <strong>Экономия до 30%</strong> по сравнению с российским рынком.
+      </p>
       <div class="hero__actions luxury-scale-in" style="animation-delay: 1s;">
-        <a class="btn-primary luxury-glow" routerLink="/catalog">Перейти в каталог</a>
-        <button class="btn-ghost luxury-glow" type="button" (click)="selectFilter(showcaseFilters[0])">Подбор за 48 часов</button>
+        <a class="btn-primary luxury-glow" routerLink="/catalog">
+          <i class="fas fa-search"></i>
+          Найти авто мечты
+        </a>
+        <button class="btn-ghost luxury-glow" type="button" (click)="selectFilter(showcaseFilters[0])">
+          <i class="fas fa-calculator"></i>
+          Рассчитать стоимость
+        </button>
       </div>
       <div class="hero__stats luxury-fade-in" style="animation-delay: 1.2s;">
-        <div>
-          <strong>312</strong>
-          <span>Авто привезли клиентам в 2024</span>
+        <div class="stat-card">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Авто доставлено</div>
+          <div class="stat-detail">в 2024 году</div>
         </div>
-        <div>
-          <strong>22 дня</strong>
-          <span>Средний срок доставки от покупки до ключей</span>
+        <div class="stat-card">
+          <div class="stat-number">14</div>
+          <div class="stat-label">дней</div>
+          <div class="stat-detail">средний срок доставки</div>
         </div>
-        <div>
-          <strong>98%</strong>
-          <span>Клиентов приходят по рекомендациям</span>
+        <div class="stat-card">
+          <div class="stat-number">99%</div>
+          <div class="stat-label">довольных клиентов</div>
+          <div class="stat-detail">возвращаются к нам</div>
         </div>
       </div>
     </div>
     <div class="hero__visual">
-      <div class="halo"></div>
-      <img ngSrc="/assets/hero/gt3.svg" width="650" height="420" alt="Европейский автомобиль" class="hero__image">
-      <div class="hero__card glass-card">
-        <h3>Цифровая проверка</h3>
-        <p>Каждый автомобиль проходит 118 критериев проверки по базе сервисов ЕС и СНГ. Вы получаете готовый
-          аудит в форматах PDF и интерактивной ссылки.</p>
-        <div class="hero__card-stats">
-          <div>
-            <strong>VIN Control</strong>
-            <span>Проверка истории, сервисных обращений, страховых кейсов.</span>
+      <div class="hero__image-container">
+        <div class="hero__car-showcase">
+          <div class="car-3d-model">
+            <div class="car-body"></div>
+            <div class="car-wheels">
+              <div class="wheel front-left"></div>
+              <div class="wheel front-right"></div>
+              <div class="wheel rear-left"></div>
+              <div class="wheel rear-right"></div>
+            </div>
+            <div class="car-lights">
+              <div class="headlight left"></div>
+              <div class="headlight right"></div>
+            </div>
           </div>
-          <div>
-            <strong>Road Test</strong>
-            <span>Видео-отчет и телеметрия по результатам тест-драйва.</span>
+          <div class="scan-lines">
+            <div class="scan-line"></div>
+            <div class="scan-line"></div>
+            <div class="scan-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero__features">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Полная проверка</h4>
+            <p>118 критериев проверки по базам ЕС</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-euro-sign"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Экономия до 30%</h4>
+            <p>Прямые поставки без переплат</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Быстрая доставка</h4>
+            <p>От 7 до 14 дней до Москвы</p>
           </div>
         </div>
       </div>
