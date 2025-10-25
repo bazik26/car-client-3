@@ -54,6 +54,10 @@ export class FingerprintUtil {
    * Информация об экране
    */
   private getScreenInfo(): string {
+    if (typeof window === 'undefined' || !window.screen) {
+      return 'no_screen';
+    }
+    
     const screen = window.screen;
     return [
       screen.width,
@@ -69,6 +73,10 @@ export class FingerprintUtil {
    * Информация о браузере
    */
   private getBrowserInfo(): string {
+    if (typeof navigator === 'undefined') {
+      return 'no_navigator';
+    }
+    
     const nav = navigator;
     return [
       nav.userAgent,
@@ -85,24 +93,36 @@ export class FingerprintUtil {
    * Информация о часовом поясе
    */
   private getTimezoneInfo(): string {
-    const date = new Date();
-    return [
-      Intl.DateTimeFormat().resolvedOptions().timeZone,
-      date.getTimezoneOffset(),
-      date.getHours(),
-      date.getMinutes()
-    ].join(',');
+    try {
+      const date = new Date();
+      return [
+        Intl.DateTimeFormat().resolvedOptions().timeZone,
+        date.getTimezoneOffset(),
+        date.getHours(),
+        date.getMinutes()
+      ].join(',');
+    } catch (error) {
+      return 'timezone_error';
+    }
   }
 
   /**
    * Информация о языках
    */
   private getLanguageInfo(): string {
-    return [
-      navigator.language,
-      navigator.languages?.join(',') || '',
-      document.documentElement.lang || ''
-    ].join(',');
+    try {
+      if (typeof navigator === 'undefined') {
+        return 'no_navigator_lang';
+      }
+      
+      return [
+        navigator.language,
+        navigator.languages?.join(',') || '',
+        typeof document !== 'undefined' ? document.documentElement.lang || '' : ''
+      ].join(',');
+    } catch (error) {
+      return 'language_error';
+    }
   }
 
   /**
@@ -110,6 +130,10 @@ export class FingerprintUtil {
    */
   private getCanvasFingerprint(): string {
     try {
+      if (typeof document === 'undefined') {
+        return 'no_document';
+      }
+      
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return 'no_canvas';
@@ -138,14 +162,21 @@ export class FingerprintUtil {
    */
   private getWebGLFingerprint(): string {
     try {
+      if (typeof document === 'undefined') {
+        return 'no_document_webgl';
+      }
+      
       const canvas = document.createElement('canvas');
       const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
       if (!gl) return 'no_webgl';
 
-      const renderer = gl.getParameter(gl.RENDERER);
-      const vendor = gl.getParameter(gl.VENDOR);
-      const version = gl.getParameter(gl.VERSION);
-      const shadingLanguageVersion = gl.getParameter(gl.SHADING_LANGUAGE_VERSION);
+      // Приводим к правильному типу WebGLRenderingContext
+      const webglContext = gl as WebGLRenderingContext;
+      
+      const renderer = webglContext.getParameter(webglContext.RENDERER);
+      const vendor = webglContext.getParameter(webglContext.VENDOR);
+      const version = webglContext.getParameter(webglContext.VERSION);
+      const shadingLanguageVersion = webglContext.getParameter(webglContext.SHADING_LANGUAGE_VERSION);
 
       return [renderer, vendor, version, shadingLanguageVersion].join(',');
     } catch (error) {
@@ -158,7 +189,14 @@ export class FingerprintUtil {
    */
   private getAudioFingerprint(): string {
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      // Проверяем поддержку AudioContext
+      if (typeof window === 'undefined' || !window.AudioContext && !(window as any).webkitAudioContext) {
+        return 'no_audio_context';
+      }
+
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const audioContext = new AudioContextClass();
+      
       const oscillator = audioContext.createOscillator();
       const analyser = audioContext.createAnalyser();
       const gainNode = audioContext.createGain();
@@ -188,39 +226,47 @@ export class FingerprintUtil {
    * Fonts fingerprint
    */
   private getFontsFingerprint(): string {
-    const testFonts = [
-      'Arial', 'Helvetica', 'Times New Roman', 'Courier New',
-      'Verdana', 'Georgia', 'Palatino', 'Garamond',
-      'Comic Sans MS', 'Trebuchet MS', 'Arial Black', 'Impact'
-    ];
+    try {
+      if (typeof document === 'undefined') {
+        return 'no_document_fonts';
+      }
+      
+      const testFonts = [
+        'Arial', 'Helvetica', 'Times New Roman', 'Courier New',
+        'Verdana', 'Georgia', 'Palatino', 'Garamond',
+        'Comic Sans MS', 'Trebuchet MS', 'Arial Black', 'Impact'
+      ];
 
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return 'no_canvas_fonts';
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return 'no_canvas_fonts';
 
-    const baseFonts = ['monospace', 'sans-serif', 'serif'];
-    const testString = 'mmmmmmmmmmlli';
-    const testSize = '72px';
-    const h = canvas.height = 60;
-    const w = canvas.width = 240;
+      const baseFonts = ['monospace', 'sans-serif', 'serif'];
+      const testString = 'mmmmmmmmmmlli';
+      const testSize = '72px';
+      const h = canvas.height = 60;
+      const w = canvas.width = 240;
 
-    ctx.textBaseline = 'top';
-    ctx.font = testSize + ' monospace';
-    ctx.fillText(testString, 0, 0);
-    const baseWidths = baseFonts.map(font => {
-      ctx.font = testSize + ' ' + font;
-      return ctx.measureText(testString).width;
-    });
-
-    const detectedFonts = testFonts.filter(font => {
-      const detected = baseFonts.some((baseFont, index) => {
-        ctx.font = testSize + ' ' + font + ', ' + baseFont;
-        return ctx.measureText(testString).width !== baseWidths[index];
+      ctx.textBaseline = 'top';
+      ctx.font = testSize + ' monospace';
+      ctx.fillText(testString, 0, 0);
+      const baseWidths = baseFonts.map(font => {
+        ctx.font = testSize + ' ' + font;
+        return ctx.measureText(testString).width;
       });
-      return detected;
-    });
 
-    return detectedFonts.join(',');
+      const detectedFonts = testFonts.filter(font => {
+        const detected = baseFonts.some((baseFont, index) => {
+          ctx.font = testSize + ' ' + font + ', ' + baseFont;
+          return ctx.measureText(testString).width !== baseWidths[index];
+        });
+        return detected;
+      });
+
+      return detectedFonts.join(',');
+    } catch (error) {
+      return 'fonts_error';
+    }
   }
 
   /**
