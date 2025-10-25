@@ -11,9 +11,9 @@ FROM nginx:alpine
 COPY --from=build /app/dist/car-market-client/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Debug: List files to verify they exist
+# Debug: List files to verify they exist - Force rebuild
 RUN ls -la /usr/share/nginx/html/
-RUN echo "Files copied successfully"
+RUN echo "Files copied successfully - $(date)"
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
