@@ -209,11 +209,13 @@
           padding: 12px 16px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-          .message-text {
-            font-size: 14px;
-            line-height: 1.4;
-            margin-bottom: 4px;
-          }
+        .message-text {
+          font-size: 14px;
+          line-height: 1.4;
+          margin-bottom: 4px;
+          color: #1a1a1a !important; // Темный цвет для лучшей читаемости
+          font-weight: 500;
+        }
 
           .message-time {
             font-size: 11px;

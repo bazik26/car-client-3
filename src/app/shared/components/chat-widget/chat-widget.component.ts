@@ -70,6 +70,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     if (this.socket) {
       this.socket.disconnect();
     }
+    this.stopMessagePolling();
   }
   
   private async initializeFingerprint() {
@@ -300,6 +301,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
     // Загружаем существующие сообщения
     this.loadMessages(sessionId);
+    
+    // Добавляем периодическое обновление сообщений как fallback
+    this.startMessagePolling(sessionId);
   }
   
   toggleChat() {
@@ -422,6 +426,28 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   private getClientIP(): string {
     // Простой способ получения IP (может не работать в некоторых случаях)
     return 'unknown';
+  }
+
+  private pollingInterval: any = null;
+
+  private startMessagePolling(sessionId: string) {
+    // Очищаем предыдущий интервал если есть
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+    }
+    
+    // Обновляем сообщения каждые 3 секунды
+    this.pollingInterval = setInterval(() => {
+      console.log('Polling for new messages...');
+      this.loadMessages(sessionId);
+    }, 3000);
+  }
+
+  private stopMessagePolling() {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+      this.pollingInterval = null;
+    }
   }
   
   private loadMessages(sessionId: string) {
