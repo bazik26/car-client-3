@@ -127,9 +127,13 @@
       
       <div *ngIf="bestOffer(); else fallbackOffer">
         <h2 class="best-offer__title">
-          🚗 {{ bestOffer()?.brand }} {{ bestOffer()?.model }} {{ bestOffer()?.year }} • {{ formatPrice(bestOffer()?.price) }}
+          {{ bestOffer()?.brand }} {{ bestOffer()?.model }} {{ bestOffer()?.year }}
         </h2>
-        <p class="best-offer__description">{{ getCarFeatures(bestOffer()) }}</p>
+        <div class="best-offer__price">{{ formatPrice(bestOffer()?.price) }}</div>
+        <ul class="best-offer__meta">
+          <li><span>Год выпуска</span>{{ bestOffer()?.year }}</li>
+          <li><span>Комплектация</span>{{ getCarFeatures(bestOffer()) }}</li>
+        </ul>
         <div class="best-offer__actions">
           <button class="btn btn--primary" routerLink="/catalog">
             <i class="fas fa-search"></i>
@@ -145,9 +149,13 @@
       <ng-template #fallbackOffer>
         <div *ngIf="fallbackCar(); else staticFallback">
           <h2 class="best-offer__title">
-            🚗 {{ fallbackCar()?.brand }} {{ fallbackCar()?.model }} {{ fallbackCar()?.year }} • {{ formatPrice(fallbackCar()?.price) }}
+            {{ fallbackCar()?.brand }} {{ fallbackCar()?.model }} {{ fallbackCar()?.year }}
           </h2>
-          <p class="best-offer__description">{{ getCarFeatures(fallbackCar()) }}</p>
+          <div class="best-offer__price">{{ formatPrice(fallbackCar()?.price) }}</div>
+          <ul class="best-offer__meta">
+            <li><span>Год выпуска</span>{{ fallbackCar()?.year }}</li>
+            <li><span>Комплектация</span>{{ getCarFeatures(fallbackCar()) }}</li>
+          </ul>
           <div class="best-offer__actions">
             <button class="btn btn--primary" routerLink="/catalog">
               <i class="fas fa-search"></i>
@@ -161,8 +169,12 @@
         </div>
         
         <ng-template #staticFallback>
-          <h2 class="best-offer__title">🚗 BMW X5 2023 • 2.5M ₽</h2>
-          <p class="best-offer__description">Полный привод • 45,000 км • В наличии в Москве</p>
+          <h2 class="best-offer__title">BMW X5 2023</h2>
+          <div class="best-offer__price">2.5M ₽</div>
+          <ul class="best-offer__meta">
+            <li><span>Год выпуска</span>2023</li>
+            <li><span>Комплектация</span>Полный привод • 45 000 км • В наличии в Москве</li>
+          </ul>
           <div class="best-offer__actions">
             <button class="btn btn--primary" routerLink="/catalog">
               <i class="fas fa-search"></i>
