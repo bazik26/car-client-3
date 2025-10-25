@@ -3,11 +3,12 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { CommonModule } from '@angular/common';
 
 import { BRAND_CONFIG } from '../core/constants/brand';
+import { ChatWidgetComponent } from '../shared/components/chat-widget/chat-widget.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ChatWidgetComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
