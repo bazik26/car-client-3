@@ -186,6 +186,25 @@
     transition: var(--transition-slow);
   }
   
+  .car-placeholder {
+    width: 100%;
+    height: 120px;
+    background: var(--color-bg-soft);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: 2rem;
+    transition: var(--transition-slow);
+    
+    &:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+  }
+  
   .car-badge {
     position: absolute;
     top: 0.5rem;
@@ -238,6 +257,25 @@
     width: 100%;
     height: 300px;
     object-fit: cover;
+  }
+  
+  .car-placeholder-large {
+    width: 100%;
+    height: 300px;
+    background: var(--color-bg-soft);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: 4rem;
+    transition: var(--transition-slow);
+    
+    &:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
   }
   
   .car-badge-large {
@@ -772,6 +810,24 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    
+    .story-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--color-bg-soft);
+      border: 2px dashed var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: 2.5rem;
+      transition: var(--transition-slow);
+      
+      &:hover {
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
+      }
     }
     
     .story-badge {

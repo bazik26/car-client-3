@@ -53,7 +53,9 @@
       <div class="hero__car-showcase">
         <div class="hero__car-card hero__car-card--featured">
           <div class="car-image">
-            <img src="/assets/cars/bmw-x5.jpg" alt="BMW X5" class="car-img">
+            <div class="car-placeholder">
+              <i class="fas fa-car"></i>
+            </div>
             <div class="car-badge">Хит продаж</div>
           </div>
           <div class="car-info">
@@ -67,7 +69,9 @@
         
         <div class="hero__car-card hero__car-card--secondary">
           <div class="car-image">
-            <img src="/assets/cars/mercedes-e-class.jpg" alt="Mercedes E-Class" class="car-img">
+            <div class="car-placeholder">
+              <i class="fas fa-car"></i>
+            </div>
             <div class="car-badge car-badge--sale">Скидка 15%</div>
           </div>
           <div class="car-info">
@@ -81,7 +85,9 @@
         
         <div class="hero__car-card hero__car-card--tertiary">
           <div class="car-image">
-            <img src="/assets/cars/audi-a6.jpg" alt="Audi A6" class="car-img">
+            <div class="car-placeholder">
+              <i class="fas fa-car"></i>
+            </div>
             <div class="car-badge car-badge--new">Новинка</div>
           </div>
           <div class="car-info">
@@ -187,10 +193,12 @@
     <ng-template #fallbackOffer>
       <div class="best-offer__content">
         <div class="best-offer__car">
-          <div class="car-image-large">
-            <img src="/assets/cars/bmw-x5.jpg" alt="BMW X5" class="car-img-large">
-            <div class="car-badge-large">Популярный выбор</div>
+        <div class="car-image-large">
+          <div class="car-placeholder-large">
+            <i class="fas fa-car"></i>
           </div>
+          <div class="car-badge-large">Популярный выбор</div>
+        </div>
           <div class="car-details">
             <h3 class="car-title">BMW X5 2023</h3>
             <div class="car-price-large">2.8M ₽</div>
@@ -379,7 +387,9 @@
     <div class="stories__grid">
       <article class="story-card" *ngFor="let car of soldRecently(); let i = index">
         <div class="story-card__image">
-          <img [src]="car.images?.[0] || '/assets/cars/default.jpg'" [alt]="car.brand + ' ' + car.model" class="story-img">
+          <div class="story-placeholder">
+            <i class="fas fa-car"></i>
+          </div>
           <div class="story-badge">Продано</div>
         </div>
         <div class="story-card__content">
