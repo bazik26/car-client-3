@@ -94,11 +94,13 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   }
 
   private async initializeChat() {
-    // Временно отключаем загрузку истории до обновления API
-    // await this.loadUserChatHistory();
+    // Сначала проверяем, есть ли активные сессии
+    await this.checkForActiveSessions();
     
-    // Создаем сессию чата
-    this.createChatSession();
+    // Если нет активных сессий, создаем новую
+    if (!this.currentSession()) {
+      this.createChatSession();
+    }
   }
   
   private loadUserData() {
@@ -131,6 +133,27 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     }
   }
   
+  private async checkForActiveSessions() {
+    try {
+      console.log('Checking for active sessions...');
+      
+      // Проверяем сохраненную сессию в localStorage
+      const savedSessionId = localStorage.getItem('chat_session_id');
+      if (savedSessionId) {
+        console.log('Found saved session ID:', savedSessionId);
+        const sessionExists = await this.checkExistingSession(savedSessionId);
+        if (sessionExists) {
+          return; // Сессия найдена и активна
+        }
+      }
+      
+      // Если нет сохраненной сессии или она неактивна, создаем новую
+      console.log('No active session found, will create new one');
+    } catch (error) {
+      console.error('Error checking for active sessions:', error);
+    }
+  }
+
   private async loadUserChatHistory() {
     if (!this.userFingerprint) return;
     
@@ -161,26 +184,27 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
-  private checkExistingSession(sessionId: string) {
-    // Проверяем, существует ли сессия
-    fetch(`${this.API_URL}/chat/session/${sessionId}`)
-      .then(response => response.json())
-      .then(session => {
-        if (session && session.isActive) {
-          console.log('Using existing session:', session);
-          this.currentSession.set(session);
-          this.connectToChat(sessionId);
-          // Загружаем сообщения для существующей сессии
-          this.loadMessages(sessionId);
-        } else {
-          // Сессия неактивна, создаем новую
-          this.createChatSession();
-        }
-      })
-      .catch(error => {
-        console.log('Session not found, creating new one');
-        this.createChatSession();
-      });
+  private async checkExistingSession(sessionId: string): Promise<boolean> {
+    try {
+      console.log('Checking existing session:', sessionId);
+      const response = await fetch(`${this.API_URL}/chat/session/${sessionId}`);
+      const session = await response.json();
+      
+      if (session && session.isActive) {
+        console.log('Using existing session:', session);
+        this.currentSession.set(session);
+        this.connectToChat(sessionId);
+        // Загружаем сообщения для существующей сессии
+        this.loadMessages(sessionId);
+        return true;
+      } else {
+        console.log('Session is not active, will create new one');
+        return false;
+      }
+    } catch (error) {
+      console.log('Session not found, will create new one');
+      return false;
+    }
   }
   
   private createChatSession() {
@@ -220,6 +244,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       this.connectToChat(sessionId);
       // Загружаем сообщения для новой сессии
       this.loadMessages(sessionId);
+      console.log('New session created and connected:', sessionId);
     })
     .catch(error => {
       console.error('Error creating session:', error);
