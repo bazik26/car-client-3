@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:prod": "node dist/car-market-client/server/server.mjs",
     "build": "ng build",
+    "build:ssr": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:car-market-client": "node dist/car-market-client/server/server.mjs"
