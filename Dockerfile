@@ -23,7 +23,7 @@ FROM nginx:alpine AS production
 COPY --from=builder /app/dist/car-market-client/browser /usr/share/nginx/html
 
 # Copy Nginx configuration
-COPY nginx-simple.conf /etc/nginx/nginx.conf
+COPY nginx-simple.conf /etc/nginx/conf.d/default.conf
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
@@ -34,9 +34,6 @@ RUN chown -R nextjs:nodejs /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
-
-# Test nginx config and start
-RUN nginx -t
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
