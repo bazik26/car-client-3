@@ -23,7 +23,7 @@ FROM nginx:alpine AS production
 COPY --from=builder /app/dist/car-market-client/browser /usr/share/nginx/html
 
 # Copy Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx-simple.conf /etc/nginx/nginx.conf
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
