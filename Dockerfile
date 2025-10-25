@@ -1,3 +1,4 @@
+
 FROM node:20.19.0-alpine AS build
 WORKDIR /app
 
@@ -7,13 +8,11 @@ RUN npm ci
 COPY . .
 RUN npm run build --configuration=production
 
-FROM nginx:alpine
-COPY --from=build /app/dist/car-market-client/browser /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+FROM node:20.19.0-alpine
+WORKDIR /app
 
-# Debug: List files to verify they exist
-RUN ls -la /usr/share/nginx/html/
-RUN echo "Files copied successfully"
+ENV NODE_ENV=production
+COPY --from=build /app/dist ./dist
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8080
+CMD ["node", "dist/car-market-client/server/server.mjs"]
