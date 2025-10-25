@@ -24,7 +24,7 @@
           <i class="fas fa-search"></i>
           Найти авто мечты
         </a>
-        <button class="btn btn--secondary" type="button" (click)="selectFilter(showcaseFilters[0])">
+        <button class="btn btn--secondary" type="button">
           <i class="fas fa-calculator"></i>
           Рассчитать стоимость
         </button>
@@ -50,68 +50,79 @@
     </div>
     
     <div class="hero__visual">
-      <div class="hero__stage">
-        <span class="hero__halo hero__halo--primary"></span>
-        <span class="hero__halo hero__halo--secondary"></span>
-        <div class="hero__ring hero__ring--outer"></div>
-        <div class="hero__ring hero__ring--inner"></div>
-
-        <div class="hero__panel hero__panel--primary">
-          <span class="hero__panel-label">Сделка недели</span>
-          <strong>Range Rover Velar</strong>
-          <span class="hero__panel-meta">2.9 млн ₽ · 2022 · 18 000 км</span>
-          <div class="hero__panel-trend">
-            <span class="trend-icon">↗</span>
-            <span>+12 запросов за сутки</span>
+      <div class="hero__car-showcase">
+        <div class="hero__car-card hero__car-card--featured">
+          <div class="car-image">
+            <img src="/assets/cars/bmw-x5.jpg" alt="BMW X5" class="car-img">
+            <div class="car-badge">Хит продаж</div>
+          </div>
+          <div class="car-info">
+            <h3>BMW X5 2023</h3>
+            <p class="car-price">2.8M ₽</p>
+            <div class="car-specs">
+              <span>3.0л • Автомат • 4WD</span>
+            </div>
           </div>
         </div>
-
-        <div class="hero__panel hero__panel--secondary">
-          <span class="hero__panel-label">В очереди на подбор</span>
-          <strong>Mercedes-Benz EQE</strong>
-          <span class="hero__panel-meta">Премиум электрокар · 14 дней</span>
+        
+        <div class="hero__car-card hero__car-card--secondary">
+          <div class="car-image">
+            <img src="/assets/cars/mercedes-e-class.jpg" alt="Mercedes E-Class" class="car-img">
+            <div class="car-badge car-badge--sale">Скидка 15%</div>
+          </div>
+          <div class="car-info">
+            <h3>Mercedes E-Class</h3>
+            <p class="car-price">2.2M ₽</p>
+            <div class="car-specs">
+              <span>2.0л • Автомат • RWD</span>
+            </div>
+          </div>
         </div>
-
-        <div class="hero__floating hero__floating--left">
-          <span class="hero__floating-badge">VIN Control</span>
-          <p>Полная цифровая проверка происхождения и сервисной истории из баз ЕС.</p>
-        </div>
-
-        <div class="hero__floating hero__floating--right">
-          <span class="hero__floating-badge">Road Test</span>
-          <p>Телеметрия и видео-отчёты после тест-драйва экспертом Prime Auto.</p>
+        
+        <div class="hero__car-card hero__car-card--tertiary">
+          <div class="car-image">
+            <img src="/assets/cars/audi-a6.jpg" alt="Audi A6" class="car-img">
+            <div class="car-badge car-badge--new">Новинка</div>
+          </div>
+          <div class="car-info">
+            <h3>Audi A6 2024</h3>
+            <p class="car-price">3.1M ₽</p>
+            <div class="car-specs">
+              <span>2.0л • Автомат • AWD</span>
+            </div>
+          </div>
         </div>
       </div>
-
-      <ul class="hero__features">
-        <li class="feature-card">
+      
+      <div class="hero__features">
+        <div class="feature-card">
           <div class="feature-icon">
             <i class="fas fa-shield-alt"></i>
           </div>
           <div class="feature-content">
             <h4>Полная проверка</h4>
-            <p>118 критериев по дилерским и страховым базам ЕС</p>
+            <p>118 критериев по базам ЕС</p>
           </div>
-        </li>
-        <li class="feature-card">
+        </div>
+        <div class="feature-card">
           <div class="feature-icon">
             <i class="fas fa-euro-sign"></i>
           </div>
           <div class="feature-content">
-            <h4>Прозрачная экономия</h4>
-            <p>До 30% выгоды благодаря прямым контрактам и аукционам</p>
+            <h4>Экономия до 30%</h4>
+            <p>Прямые поставки без переплат</p>
           </div>
-        </li>
-        <li class="feature-card">
+        </div>
+        <div class="feature-card">
           <div class="feature-icon">
             <i class="fas fa-clock"></i>
           </div>
           <div class="feature-content">
-            <h4>Сроки под контролем</h4>
-            <p>Логистика «под ключ»: оформление, доставка, постановка на учёт</p>
+            <h4>Быстрая доставка</h4>
+            <p>От 7 до 14 дней до Москвы</p>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -119,75 +130,107 @@
 <!-- Best Offer Section -->
 <section class="best-offer" *ngIf="bestOffer() || !isLoading()">
   <div class="container">
-    <div class="best-offer__content">
+    <div class="best-offer__header">
       <div class="best-offer__badge">
         <i class="fas fa-star"></i>
         <span>Лучшее предложение недели</span>
       </div>
-      
-      <div *ngIf="bestOffer(); else fallbackOffer">
-        <h2 class="best-offer__title">
-          {{ bestOffer()?.brand }} {{ bestOffer()?.model }} {{ bestOffer()?.year }}
-        </h2>
-        <div class="best-offer__price">{{ formatPrice(bestOffer()?.price) }}</div>
-        <ul class="best-offer__meta">
-          <li><span>Год выпуска</span>{{ bestOffer()?.year }}</li>
-          <li><span>Комплектация</span>{{ getCarFeatures(bestOffer()) }}</li>
-        </ul>
+      <h2 class="best-offer__title">Найдена идеальная машина для вас</h2>
+    </div>
+    
+    <div class="best-offer__content" *ngIf="bestOffer(); else fallbackOffer">
+      <div class="best-offer__car">
+        <div class="car-image-large">
+          <img [src]="bestOffer()?.images?.[0] || '/assets/cars/default.jpg" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" class="car-img-large">
+          <div class="car-badge-large">Лучшая цена</div>
+        </div>
+        <div class="car-details">
+          <h3 class="car-title">{{ bestOffer()?.brand }} {{ bestOffer()?.model }} {{ bestOffer()?.year }}</h3>
+          <div class="car-price-large">{{ formatPrice(bestOffer()?.price) }}</div>
+          <div class="car-specs-large">
+            <div class="spec-item">
+              <i class="fas fa-calendar"></i>
+              <span>{{ bestOffer()?.year }} год</span>
+            </div>
+            <div class="spec-item">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>{{ bestOffer()?.mileage }} км</span>
+            </div>
+            <div class="spec-item">
+              <i class="fas fa-cog"></i>
+              <span>{{ bestOffer()?.engine }}л</span>
+            </div>
+            <div class="spec-item">
+              <i class="fas fa-gas-pump"></i>
+              <span>{{ bestOffer()?.fuel }}</span>
+            </div>
+          </div>
+          <div class="car-features">
+            <span class="feature-tag">{{ bestOffer()?.drive }}</span>
+            <span class="feature-tag">{{ bestOffer()?.gearbox }}</span>
+            <span class="feature-tag" *ngIf="bestOffer()?.isAccident === false">Без ДТП</span>
+          </div>
+        </div>
+      </div>
+      <div class="best-offer__actions">
+        <button class="btn btn--primary btn--large" [routerLink]="['/cars', bestOffer()?.id]">
+          <i class="fas fa-eye"></i>
+          Подробнее о машине
+        </button>
+        <button class="btn btn--secondary btn--large" routerLink="/catalog">
+          <i class="fas fa-search"></i>
+          Смотреть все авто
+        </button>
+      </div>
+    </div>
+    
+    <ng-template #fallbackOffer>
+      <div class="best-offer__content">
+        <div class="best-offer__car">
+          <div class="car-image-large">
+            <img src="/assets/cars/bmw-x5.jpg" alt="BMW X5" class="car-img-large">
+            <div class="car-badge-large">Популярный выбор</div>
+          </div>
+          <div class="car-details">
+            <h3 class="car-title">BMW X5 2023</h3>
+            <div class="car-price-large">2.8M ₽</div>
+            <div class="car-specs-large">
+              <div class="spec-item">
+                <i class="fas fa-calendar"></i>
+                <span>2023 год</span>
+              </div>
+              <div class="spec-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>45 000 км</span>
+              </div>
+              <div class="spec-item">
+                <i class="fas fa-cog"></i>
+                <span>3.0л</span>
+              </div>
+              <div class="spec-item">
+                <i class="fas fa-gas-pump"></i>
+                <span>Бензин</span>
+              </div>
+            </div>
+            <div class="car-features">
+              <span class="feature-tag">Полный привод</span>
+              <span class="feature-tag">Автомат</span>
+              <span class="feature-tag">Без ДТП</span>
+            </div>
+          </div>
+        </div>
         <div class="best-offer__actions">
-          <button class="btn btn--primary" routerLink="/catalog">
+          <button class="btn btn--primary btn--large" routerLink="/catalog">
             <i class="fas fa-search"></i>
-            Смотреть все авто
+            Найти похожие авто
           </button>
-          <button class="btn btn--secondary" [routerLink]="['/car', bestOffer()?.id]">
-            <i class="fas fa-eye"></i>
-            Подробнее
+          <button class="btn btn--secondary btn--large" routerLink="/contacts">
+            <i class="fas fa-phone"></i>
+            Получить консультацию
           </button>
         </div>
       </div>
-      
-      <ng-template #fallbackOffer>
-        <div *ngIf="fallbackCar(); else staticFallback">
-          <h2 class="best-offer__title">
-            {{ fallbackCar()?.brand }} {{ fallbackCar()?.model }} {{ fallbackCar()?.year }}
-          </h2>
-          <div class="best-offer__price">{{ formatPrice(fallbackCar()?.price) }}</div>
-          <ul class="best-offer__meta">
-            <li><span>Год выпуска</span>{{ fallbackCar()?.year }}</li>
-            <li><span>Комплектация</span>{{ getCarFeatures(fallbackCar()) }}</li>
-          </ul>
-          <div class="best-offer__actions">
-            <button class="btn btn--primary" routerLink="/catalog">
-              <i class="fas fa-search"></i>
-              Смотреть все авто
-            </button>
-            <button class="btn btn--secondary" routerLink="/catalog">
-              <i class="fas fa-phone"></i>
-              Консультация
-            </button>
-          </div>
-        </div>
-        
-        <ng-template #staticFallback>
-          <h2 class="best-offer__title">BMW X5 2023</h2>
-          <div class="best-offer__price">2.5M ₽</div>
-          <ul class="best-offer__meta">
-            <li><span>Год выпуска</span>2023</li>
-            <li><span>Комплектация</span>Полный привод • 45 000 км • В наличии в Москве</li>
-          </ul>
-          <div class="best-offer__actions">
-            <button class="btn btn--primary" routerLink="/catalog">
-              <i class="fas fa-search"></i>
-              Смотреть все авто
-            </button>
-            <button class="btn btn--secondary" routerLink="/catalog">
-              <i class="fas fa-phone"></i>
-              Консультация
-            </button>
-          </div>
-        </ng-template>
-      </ng-template>
-    </div>
+    </ng-template>
   </div>
 </section>
 
@@ -248,51 +291,54 @@
 <!-- Why Us Section -->
 <section class="why-us" id="why-us">
   <div class="container">
+    <div class="why-us__header">
+      <h2 class="why-us__title">Почему клиенты доверяют Prime Auto</h2>
+      <p class="why-us__subtitle">
+        Мы соединяем классический подход к покупке авто и современные цифровые инструменты, 
+        чтобы сделать путь к новой машине понятным и безопасным.
+      </p>
+    </div>
+    
     <div class="why-us__grid">
-      <div class="why-us__content">
-        <h3 class="why-us__title">Почему клиенты доверяют Prime Auto</h3>
-        <p class="why-us__description">
-          Мы соединяем классический подход к покупке авто и современные цифровые инструменты, 
-          чтобы сделать путь к новой машине понятным и безопасным.
-        </p>
-        <ul class="why-us__features">
-          <li class="feature-item">
-            <div class="feature-item__icon">
-              <i class="fas fa-shield-alt"></i>
-            </div>
-            <div class="feature-item__content">
-              <h4>Финансовая прозрачность</h4>
-              <p>Фиксируем стоимость в договоре, все платежи проходят официально.</p>
-            </div>
-          </li>
-          <li class="feature-item">
-            <div class="feature-item__icon">
-              <i class="fas fa-tools"></i>
-            </div>
-            <div class="feature-item__content">
-              <h4>Экспертная инспекция</h4>
-              <p>Инженеры с опытом работы в дилерских центрах составляют техническое заключение.</p>
-            </div>
-          </li>
-          <li class="feature-item">
-            <div class="feature-item__icon">
-              <i class="fas fa-headset"></i>
-            </div>
-            <div class="feature-item__content">
-              <h4>Люди и сервис</h4>
-              <p>Персональный менеджер на связи 24/7, помощь с trade-in и кредитом партнёров.</p>
-            </div>
-          </li>
-        </ul>
+      <div class="why-us__feature">
+        <div class="feature-icon-large">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Финансовая прозрачность</h3>
+        <p>Фиксируем стоимость в договоре, все платежи проходят официально. Никаких скрытых комиссий.</p>
+        <div class="feature-stats">
+          <div class="stat">
+            <span class="stat-number">0%</span>
+            <span class="stat-label">скрытых комиссий</span>
+          </div>
+        </div>
       </div>
       
-      <div class="why-us__visual">
-        <div class="why-us__image">
-          <img ngSrc="/assets/hero/team.svg" alt="Команда Prime Auto" width="540" height="320">
+      <div class="why-us__feature">
+        <div class="feature-icon-large">
+          <i class="fas fa-tools"></i>
         </div>
-        <div class="why-us__stat">
-          <div class="stat-number">+17%</div>
-          <p>Авто с гарантией от производителя благодаря работе с официальными партнёрами.</p>
+        <h3>Экспертная инспекция</h3>
+        <p>Инженеры с опытом работы в дилерских центрах составляют техническое заключение.</p>
+        <div class="feature-stats">
+          <div class="stat">
+            <span class="stat-number">200+</span>
+            <span class="stat-label">пунктов проверки</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="why-us__feature">
+        <div class="feature-icon-large">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>Люди и сервис</h3>
+        <p>Персональный менеджер на связи 24/7, помощь с trade-in и кредитом партнёров.</p>
+        <div class="feature-stats">
+          <div class="stat">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">поддержка</span>
+          </div>
         </div>
       </div>
     </div>
@@ -322,28 +368,35 @@
 <!-- Stories Section -->
 <section class="stories" *ngIf="soldRecently().length">
   <div class="container">
+    <div class="stories__header">
+      <h2 class="stories__title">Свежие истории клиентов</h2>
+      <p class="stories__subtitle">
+        Короткие заметки о том, как проходит путь от запроса до выдачи ключей. 
+        Каждая история — живое подтверждение процесса.
+      </p>
+    </div>
+    
     <div class="stories__grid">
-      <div class="stories__intro">
-        <h3 class="stories__title">Свежие истории клиентов</h3>
-        <p class="stories__description">
-          Короткие заметки о том, как проходит путь от запроса до выдачи ключей. 
-          Каждая история — живое подтверждение процесса.
-        </p>
-        <a class="btn btn--primary" routerLink="/contacts">Получить консультацию</a>
-      </div>
-      
-      <div class="stories__list">
-        <article class="story-card" *ngFor="let car of soldRecently(); let i = index">
-          <div class="story-card__header">
-            <span class="story-card__car">{{ car.brand }} {{ car.model }}</span>
-            <small class="story-card__year">{{ car.year }}</small>
+      <article class="story-card" *ngFor="let car of soldRecently(); let i = index">
+        <div class="story-card__image">
+          <img [src]="car.images?.[0] || '/assets/cars/default.jpg" [alt]="car.brand + ' ' + car.model" class="story-img">
+          <div class="story-badge">Продано</div>
+        </div>
+        <div class="story-card__content">
+          <div class="story-header">
+            <h3 class="story-car">{{ car.brand }} {{ car.model }}</h3>
+            <span class="story-year">{{ car.year }}</span>
           </div>
-          <p class="story-card__text">
+          <p class="story-text">
             Доставили за {{ 12 + (car.id % 7) }} дней. Клиент получил выгоду {{ (car.price * 0.07) | number:'1.0-0' }} ₽
             по сравнению с рынком РФ.
           </p>
-        </article>
-      </div>
+          <div class="story-meta">
+            <span class="story-price">{{ formatPrice(car.price) }}</span>
+            <span class="story-location">{{ car.location || 'Москва' }}</span>
+          </div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
