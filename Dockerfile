@@ -36,8 +36,12 @@ RUN chown -R nextjs:nodejs /usr/share/nginx/html
 # Test nginx config
 RUN nginx -t
 
+# List files to debug
+RUN ls -la /usr/share/nginx/html/
+RUN ls -la /etc/nginx/conf.d/
+
 # Expose port 80
 EXPOSE 80
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start Nginx with debug info
+CMD ["sh", "-c", "echo 'Starting Nginx...' && nginx -g 'daemon off;'"]
