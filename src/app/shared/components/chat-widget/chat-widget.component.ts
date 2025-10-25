@@ -53,7 +53,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   
   // WebSocket
   private socket: Socket | null = null;
-  private readonly API_URL = 'http://localhost:3001'; // Замените на ваш API URL
+  private readonly API_URL = 'https://car-api-production.up.railway.app'; // Railway API URL
   
   ngOnInit() {
     this.initializeChat();
