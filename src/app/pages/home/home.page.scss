@@ -1,10 +1,15 @@
-/* Home Page Styles */
+/* Luxury Home Page Styles */
 .hero-cta {
-  padding: 40px 0;
-  background: linear-gradient(135deg, rgba(79, 140, 255, 0.1), rgba(97, 222, 163, 0.1));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 60px 0;
+  background: linear-gradient(135deg, 
+    rgba(79, 140, 255, 0.15) 0%, 
+    rgba(97, 222, 163, 0.15) 50%, 
+    rgba(255, 107, 157, 0.1) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 
   &::before {
     content: '';
@@ -22,52 +27,148 @@
     position: relative;
     z-index: 2;
     text-align: center;
-    padding: 20px;
-    background: rgba(20, 26, 38, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    padding: 40px;
+    background: linear-gradient(135deg, 
+      rgba(20, 26, 38, 0.8) 0%, 
+      rgba(30, 40, 60, 0.6) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, 
+        rgba(79, 140, 255, 0.1) 0%, 
+        transparent 50%, 
+        rgba(97, 222, 163, 0.1) 100%);
+      pointer-events: none;
+    }
   }
 
   &__badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: var(--gradient-primary);
+    gap: 10px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, 
+      rgba(79, 140, 255, 0.9) 0%, 
+      rgba(97, 222, 163, 0.9) 100%);
     color: #0b1221;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 15px rgba(79, 140, 255, 0.3);
+    border-radius: 25px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    box-shadow: 
+      0 8px 25px rgba(79, 140, 255, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+      transition: left 0.8s ease;
+    }
+    
+    &:hover::before {
+      left: 100%;
+    }
 
-    i { color: #ffd700; }
+    i { 
+      color: #ffd700; 
+      font-size: 1.1rem;
+      animation: pulse 2s infinite;
+    }
   }
 
   h2 {
-    font-size: clamp(1.4rem, 1.2rem + 1vw, 1.8rem);
-    font-weight: 700;
-    margin: 0 0 8px;
-    background: var(--gradient-primary);
+    font-size: clamp(1.8rem, 1.5rem + 1.5vw, 2.4rem);
+    font-weight: 800;
+    margin: 0 0 16px;
+    background: linear-gradient(135deg, 
+      #4f8cff 0%, 
+      #61dea3 50%, 
+      #ff6b9d 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow: 0 0 30px rgba(79, 140, 255, 0.3);
+    line-height: 1.2;
   }
 
   p {
     color: var(--color-text-muted);
-    margin: 0 0 20px;
-    font-size: 1rem;
+    margin: 0 0 32px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   &__actions {
     display: flex;
-    gap: 12px;
+    gap: 20px;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 8px;
+    
+    .btn-primary, .btn-ghost {
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      min-width: 180px;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, 
+          transparent, 
+          rgba(255, 255, 255, 0.2), 
+          transparent);
+        transition: left 0.6s ease;
+      }
+      
+      &:hover::before {
+        left: 100%;
+      }
+      
+      &:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 
+          0 15px 35px rgba(79, 140, 255, 0.4),
+          0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+    }
   }
 }
 
