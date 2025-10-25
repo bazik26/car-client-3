@@ -36,11 +36,7 @@ RUN chown -R nextjs:nodejs /usr/share/nginx/html
 # Test nginx config
 RUN nginx -t
 
-# List files to debug
-RUN echo "=== Builder stage files ==="
-RUN ls -la /app/dist/
-RUN ls -la /app/dist/car-market-client/
-RUN ls -la /app/dist/car-market-client/browser/
+# List files to debug (after copying from builder)
 RUN echo "=== Production stage files ==="
 RUN ls -la /usr/share/nginx/html/
 RUN ls -la /etc/nginx/conf.d/
