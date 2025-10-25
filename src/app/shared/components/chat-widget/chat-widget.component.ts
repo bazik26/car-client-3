@@ -94,8 +94,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   }
 
   private async initializeChat() {
-    // Загружаем историю чата пользователя
-    await this.loadUserChatHistory();
+    // Временно отключаем загрузку истории до обновления API
+    // await this.loadUserChatHistory();
     
     // Создаем сессию чата
     this.createChatSession();
@@ -170,6 +170,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
           console.log('Using existing session:', session);
           this.currentSession.set(session);
           this.connectToChat(sessionId);
+          // Загружаем сообщения для существующей сессии
+          this.loadMessages(sessionId);
         } else {
           // Сессия неактивна, создаем новую
           this.createChatSession();
@@ -183,27 +185,13 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   
   private createChatSession() {
     const sessionId = this.generateSessionId();
-    const sessionData: Partial<ChatSession> & {
-      userFingerprint?: string;
-      userData?: {
-        name?: string;
-        email?: string;
-        phone?: string;
-        ipAddress?: string;
-        userAgent?: string;
-      };
-    } = {
+    const sessionData: Partial<ChatSession> = {
       sessionId,
       projectSource: 'car-market-client',
       isActive: true,
-      userFingerprint: this.userFingerprint || undefined,
-      userData: {
-        name: this.clientName,
-        email: this.clientEmail,
-        phone: this.clientPhone,
-        ipAddress: this.getClientIP(),
-        userAgent: navigator.userAgent
-      }
+      clientName: this.clientName,
+      clientEmail: this.clientEmail,
+      clientPhone: this.clientPhone
     };
     
     // Создаем сессию через API
@@ -230,6 +218,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       this.currentSession.set(session);
       this.saveUserData(); // Сохраняем данные пользователя
       this.connectToChat(sessionId);
+      // Загружаем сообщения для новой сессии
+      this.loadMessages(sessionId);
     })
     .catch(error => {
       console.error('Error creating session:', error);
