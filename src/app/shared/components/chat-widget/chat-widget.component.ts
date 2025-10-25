@@ -56,6 +56,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   private readonly API_URL = 'https://car-api-production.up.railway.app'; // Railway API URL
   
   ngOnInit() {
+    this.loadUserData();
     this.initializeChat();
   }
   
@@ -68,6 +69,56 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   private initializeChat() {
     // Создаем сессию чата
     this.createChatSession();
+  }
+  
+  private loadUserData() {
+    // Загружаем сохраненные данные пользователя
+    const savedName = localStorage.getItem('chat_user_name');
+    const savedEmail = localStorage.getItem('chat_user_email');
+    const savedPhone = localStorage.getItem('chat_user_phone');
+    const savedSessionId = localStorage.getItem('chat_session_id');
+    
+    if (savedName) this.clientName = savedName;
+    if (savedEmail) this.clientEmail = savedEmail;
+    if (savedPhone) this.clientPhone = savedPhone;
+    
+    // Если есть сохраненная сессия, пытаемся её использовать
+    if (savedSessionId) {
+      this.checkExistingSession(savedSessionId);
+    }
+  }
+  
+  private saveUserData() {
+    // Сохраняем данные пользователя
+    if (this.clientName) localStorage.setItem('chat_user_name', this.clientName);
+    if (this.clientEmail) localStorage.setItem('chat_user_email', this.clientEmail);
+    if (this.clientPhone) localStorage.setItem('chat_user_phone', this.clientPhone);
+    
+    // Сохраняем ID сессии
+    const session = this.currentSession();
+    if (session) {
+      localStorage.setItem('chat_session_id', session.sessionId);
+    }
+  }
+  
+  private checkExistingSession(sessionId: string) {
+    // Проверяем, существует ли сессия
+    fetch(`${this.API_URL}/chat/session/${sessionId}`)
+      .then(response => response.json())
+      .then(session => {
+        if (session && session.isActive) {
+          console.log('Using existing session:', session);
+          this.currentSession.set(session);
+          this.connectToChat(sessionId);
+        } else {
+          // Сессия неактивна, создаем новую
+          this.createChatSession();
+        }
+      })
+      .catch(error => {
+        console.log('Session not found, creating new one');
+        this.createChatSession();
+      });
   }
   
   private createChatSession() {
@@ -100,6 +151,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     .then(session => {
       console.log('Session created successfully:', session);
       this.currentSession.set(session);
+      this.saveUserData(); // Сохраняем данные пользователя
       this.connectToChat(sessionId);
     })
     .catch(error => {
@@ -187,29 +239,29 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       projectSource: 'car-market-client'
     };
     
-    // Сначала добавляем сообщение в интерфейс для мгновенного отображения
-    const tempMessage = {
-      id: Date.now(), // временный ID
-      sessionId: session.sessionId,
-      message: messageText,
-      senderType: 'client' as const,
-      clientName: this.clientName || 'Аноним',
-      clientEmail: this.clientEmail,
-      clientPhone: this.clientPhone,
-      createdAt: new Date(),
-      isRead: false
-    };
-    
-    this.messages.update(messages => [...messages, tempMessage]);
-    this.scrollToBottom();
-    
     // Очищаем поле ввода
     this.newMessage = '';
     
     // Отправляем через WebSocket если доступен
     if (this.socket) {
       this.socket.emit('send-message', messageData);
+      // WebSocket вернет сообщение через событие 'new-message'
     } else {
+      // Fallback - добавляем сообщение мгновенно и отправляем через HTTP
+      const tempMessage = {
+        id: Date.now(), // временный ID
+        sessionId: session.sessionId,
+        message: messageText,
+        senderType: 'client' as const,
+        clientName: this.clientName || 'Аноним',
+        clientEmail: this.clientEmail,
+        clientPhone: this.clientPhone,
+        createdAt: new Date(),
+        isRead: false
+      };
+      
+      this.messages.update(messages => [...messages, tempMessage]);
+      this.scrollToBottom();
       // Fallback - отправляем через HTTP
       fetch(`${this.API_URL}/chat/message`, {
         method: 'POST',

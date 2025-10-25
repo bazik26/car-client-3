@@ -164,25 +164,43 @@
       .message {
         margin-bottom: 16px;
         display: flex;
+        animation: messageSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transform-origin: bottom;
 
         &.client {
           justify-content: flex-end;
+          animation: messageSlideInRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
           .message-content {
             background: linear-gradient(135deg, var(--color-primary, #4f8cff) 0%, var(--color-secondary, #61de9f) 100%);
             color: white;
             border-radius: 18px 18px 4px 18px;
+            box-shadow: 0 2px 8px rgba(79, 140, 255, 0.2);
+            transition: all 0.2s ease;
+            
+            &:hover {
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(79, 140, 255, 0.3);
+            }
           }
         }
 
         &.admin {
           justify-content: flex-start;
+          animation: messageSlideInLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
           .message-content {
             background: white;
             color: var(--color-text, #1a1a1a);
             border: 1px solid #e5e7eb;
             border-radius: 18px 18px 18px 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            
+            &:hover {
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
           }
         }
 
@@ -343,6 +361,39 @@
 @keyframes typing {
   0%, 60%, 100% { transform: translateY(0); }
   30% { transform: translateY(-10px); }
+}
+
+@keyframes messageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes messageSlideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes messageSlideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 
 // Mobile responsiveness
