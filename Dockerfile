@@ -1,4 +1,3 @@
-
 FROM node:20.19.0-alpine AS build
 WORKDIR /app
 
@@ -8,11 +7,9 @@ RUN npm ci
 COPY . .
 RUN npm run build --configuration=production
 
-FROM node:20.19.0-alpine
-WORKDIR /app
+FROM nginx:alpine
+COPY --from=build /app/dist/car-market-client/browser /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-ENV NODE_ENV=production
-COPY --from=build /app/dist ./dist
-
-EXPOSE 8080
-CMD ["node", "dist/car-market-client/server/server.mjs"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
