@@ -110,18 +110,23 @@
         <input 
           type="text" 
           [(ngModel)]="clientName"
-          placeholder="Ваше имя"
-          class="info-input">
+          (ngModelChange)="onNameChange()"
+          placeholder="Ваше имя *"
+          class="info-input"
+          required>
         <input 
           type="email" 
           [(ngModel)]="clientEmail"
+          (ngModelChange)="onEmailChange()"
           placeholder="Email (необязательно)"
           class="info-input">
         <input 
           type="tel" 
           [(ngModel)]="clientPhone"
-          placeholder="Телефон (необязательно)"
-          class="info-input">
+          (ngModelChange)="onPhoneChange()"
+          placeholder="Телефон *"
+          class="info-input"
+          required>
       </div>
     </div>
   </div>

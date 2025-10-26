@@ -152,10 +152,14 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          clientName: this.clientName,
-          clientEmail: this.clientEmail,
-          clientPhone: this.clientPhone
+          clientName: this.clientName?.trim(),
+          clientEmail: this.clientEmail?.trim(),
+          clientPhone: this.clientPhone?.trim()
         })
+      }).then(response => {
+        if (response.ok) {
+          console.log('Session data updated successfully');
+        }
       }).catch(error => {
         console.error('Error updating session data:', error);
       });
@@ -349,6 +353,17 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   sendMessage() {
     if (!this.newMessage.trim()) return;
     
+    // Проверяем обязательные поля
+    if (!this.clientName?.trim()) {
+      alert('Пожалуйста, введите ваше имя');
+      return;
+    }
+    
+    if (!this.clientPhone?.trim()) {
+      alert('Пожалуйста, введите ваш номер телефона');
+      return;
+    }
+    
     const session = this.currentSession();
     if (!session) {
       console.log('No current session available');
@@ -356,6 +371,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     }
     
     console.log('Sending message with session:', session);
+    
+    // Сохраняем данные пользователя
+    this.saveUserData();
     
     // Обновляем данные пользователя в сессии
     this.updateSessionUserData();
@@ -365,9 +383,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       sessionId: session.sessionId,
       message: messageText,
       senderType: 'client' as const,
-      clientName: this.clientName || 'Аноним',
-      clientEmail: this.clientEmail,
-      clientPhone: this.clientPhone,
+      clientName: this.clientName.trim(),
+      clientEmail: this.clientEmail?.trim() || '',
+      clientPhone: this.clientPhone.trim(),
       projectSource: 'car-market-client'
     };
     
@@ -498,6 +516,19 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   // Проверить настройки звука при инициализации
   private checkSoundSettings() {
     this.soundEnabled.set(this.soundService.isSoundEnabled());
+  }
+
+  // Автоматическое сохранение при изменении данных
+  onNameChange() {
+    this.saveUserData();
+  }
+
+  onPhoneChange() {
+    this.saveUserData();
+  }
+
+  onEmailChange() {
+    this.saveUserData();
   }
   
   private loadMessages(sessionId: string) {

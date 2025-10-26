@@ -382,6 +382,18 @@
           &:focus {
             border-color: var(--color-primary, #4f8cff);
           }
+
+          &:invalid {
+            border-color: #ef4444;
+          }
+
+          &:valid {
+            border-color: #10b981;
+          }
+
+          &[required] {
+            border-left: 3px solid var(--color-primary, #4f8cff);
+          }
         }
       }
     }
