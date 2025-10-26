@@ -139,6 +139,28 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       localStorage.setItem('chat_session_id', session.sessionId);
     }
   }
+
+  // Обновляем данные пользователя в сессии
+  private updateSessionUserData() {
+    const session = this.currentSession();
+    if (session && (this.clientName || this.clientEmail || this.clientPhone)) {
+      // Обновляем данные в localStorage
+      this.saveUserData();
+      
+      // Отправляем обновление на сервер
+      fetch(`${this.API_URL}/chat/session/${session.sessionId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clientName: this.clientName,
+          clientEmail: this.clientEmail,
+          clientPhone: this.clientPhone
+        })
+      }).catch(error => {
+        console.error('Error updating session data:', error);
+      });
+    }
+  }
   
   private async checkForActiveSessions() {
     try {
@@ -335,6 +357,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     
     console.log('Sending message with session:', session);
     
+    // Обновляем данные пользователя в сессии
+    this.updateSessionUserData();
+    
     const messageText = this.newMessage.trim();
     const messageData = {
       sessionId: session.sessionId,
@@ -487,6 +512,19 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       })
       .then(messages => {
         console.log('Loaded messages:', messages);
+        
+        // Проверяем, есть ли новые сообщения от админа
+        const currentMessages = this.messages();
+        const newAdminMessages = messages.filter((msg: ChatMessage) => 
+          msg.senderType === 'admin' && 
+          !currentMessages.some(current => current.id === msg.id)
+        );
+        
+        // Воспроизводим звук для новых сообщений от админа
+        if (newAdminMessages.length > 0) {
+          this.soundService.playMessageSound();
+        }
+        
         this.messages.set(messages);
         this.scrollToBottom();
       })
