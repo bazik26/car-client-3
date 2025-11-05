@@ -35,6 +35,19 @@
       animation: pulse 2s infinite;
     }
 
+    .chat-logo {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    i.fa-times {
+      font-size: 20px;
+    }
+
     .chat-badge {
       position: absolute;
       top: -5px;
@@ -92,6 +105,14 @@
           cursor: pointer;
           transition: all 0.2s ease;
           font-size: 14px;
+
+          svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+          }
 
           &:hover {
             background: rgba(255, 255, 255, 0.3);
@@ -335,6 +356,13 @@
           justify-content: center;
           transition: all 0.2s;
 
+          svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+          }
+
           &:hover:not(:disabled) {
             transform: scale(1.05);
           }
@@ -342,6 +370,7 @@
           &:disabled {
             background: #d1d5db;
             cursor: not-allowed;
+            opacity: 0.5;
           }
         }
       }

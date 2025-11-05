@@ -6,7 +6,7 @@
     (click)="toggleChat()"
     [class.connected]="isConnected()"
     [class.has-messages]="messages().length > 0">
-    <i class="fas fa-comments" *ngIf="!isOpen()"></i>
+    <span class="chat-logo" *ngIf="!isOpen()">{{ getBrandLogo() }}</span>
     <i class="fas fa-times" *ngIf="isOpen()"></i>
     <span class="chat-badge" *ngIf="messages().length > 0">{{ messages().length }}</span>
   </button>
@@ -28,8 +28,16 @@
           class="sound-toggle" 
           (click)="toggleSound()"
           [class.enabled]="soundEnabled()"
-          title="Включить/выключить звук">
-          <i class="fas" [class.fa-volume-up]="soundEnabled()" [class.fa-volume-mute]="!soundEnabled()"></i>
+          [title]="soundEnabled() ? 'Выключить звук' : 'Включить звук'">
+          <svg *ngIf="soundEnabled()" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19.07 4.93C20.9447 6.80728 21.9979 9.34823 21.9979 12C21.9979 14.6518 20.9447 17.1927 19.07 19.07M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 12C17.0039 13.3308 16.4774 14.6024 15.54 15.54" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg *ngIf="!soundEnabled()" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </button>
       </div>
     </div>
@@ -94,8 +102,12 @@
         <button 
           class="send-button" 
           (click)="sendMessage()"
-          [disabled]="!newMessage.trim() || !isConnected()">
-          <i class="fas fa-paper-plane"></i>
+          [disabled]="!newMessage.trim() || !isConnected()"
+          title="Отправить сообщение">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
       </div>
     </div>

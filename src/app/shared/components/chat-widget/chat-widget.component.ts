@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { io, Socket } from 'socket.io-client';
 import { FingerprintUtil } from '../../utils/fingerprint.util';
 import { SoundService } from '../../services/sound.service';
+import { BRAND_CONFIG } from '../../../core/constants/brand';
 
 interface ChatMessage {
   id?: number;
@@ -65,6 +66,12 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   // Sound
   private soundService = inject(SoundService);
   
+  // Debounce для обновления данных сессии
+  private updateSessionTimeout: any = null;
+  
+  // Brand config для логотипа
+  protected readonly brand = BRAND_CONFIG;
+  
   async ngOnInit() {
     await this.initializeFingerprint();
     this.loadUserData();
@@ -77,6 +84,10 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       this.socket.disconnect();
     }
     this.stopMessagePolling();
+    // Очищаем debounce таймаут
+    if (this.updateSessionTimeout) {
+      clearTimeout(this.updateSessionTimeout);
+    }
   }
   
   private async initializeFingerprint() {
@@ -140,30 +151,49 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Обновляем данные пользователя в сессии
-  private updateSessionUserData() {
+  // Обновляем данные пользователя в сессии с debouncing
+  private updateSessionUserData(immediate: boolean = false) {
     const session = this.currentSession();
-    if (session && (this.clientName || this.clientEmail || this.clientPhone)) {
-      // Обновляем данные в localStorage
-      this.saveUserData();
-      
-      // Отправляем обновление на сервер
-      fetch(`${this.API_URL}/chat/session/${session.sessionId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clientName: this.clientName?.trim(),
-          clientEmail: this.clientEmail?.trim(),
-          clientPhone: this.clientPhone?.trim()
-        })
-      }).then(response => {
-        if (response.ok) {
-          console.log('Session data updated successfully');
-        }
-      }).catch(error => {
-        console.error('Error updating session data:', error);
-      });
+    if (!session || (!this.clientName && !this.clientEmail && !this.clientPhone)) {
+      return;
     }
+    
+    // Очищаем предыдущий таймаут
+    if (this.updateSessionTimeout) {
+      clearTimeout(this.updateSessionTimeout);
+    }
+    
+    // Обновляем данные в localStorage сразу
+    this.saveUserData();
+    
+    // Если нужно обновить немедленно (например, перед отправкой сообщения)
+    if (immediate) {
+      this.updateSessionUserDataRequest(session.sessionId);
+      return;
+    }
+    
+    // Debounce: обновляем на сервере через 1 секунду после последнего изменения
+    this.updateSessionTimeout = setTimeout(() => {
+      this.updateSessionUserDataRequest(session.sessionId);
+    }, 1000);
+  }
+  
+  private updateSessionUserDataRequest(sessionId: string) {
+    fetch(`${this.API_URL}/chat/session/${sessionId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientName: this.clientName?.trim(),
+        clientEmail: this.clientEmail?.trim(),
+        clientPhone: this.clientPhone?.trim()
+      })
+    }).then(response => {
+      if (response.ok) {
+        console.log('Session data updated successfully');
+      }
+    }).catch(error => {
+      console.error('Error updating session data:', error);
+    });
   }
   
   private async checkForActiveSessions() {
@@ -296,12 +326,20 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   private connectToChat(sessionId: string) {
     console.log('Connecting to chat server with sessionId:', sessionId);
     this.socket = io(this.API_URL, {
-      transports: ['websocket', 'polling']
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5,
+      timeout: 20000
     });
     
     this.socket.on('connect', () => {
       console.log('Connected to chat server');
       this.isConnected.set(true);
+      
+      // Останавливаем polling при подключении WebSocket
+      this.stopMessagePolling();
       
       // Присоединяемся к сессии
       this.socket?.emit('join-session', {
@@ -313,6 +351,15 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     this.socket.on('disconnect', () => {
       console.log('Disconnected from chat server');
       this.isConnected.set(false);
+      // Запускаем polling только когда WebSocket отключен
+      this.startMessagePolling(sessionId);
+    });
+    
+    this.socket.on('reconnect', () => {
+      console.log('Reconnected to chat server');
+      this.isConnected.set(true);
+      // Останавливаем polling при переподключении
+      this.stopMessagePolling();
     });
     
     this.socket.on('new-message', (message: ChatMessage) => {
@@ -336,11 +383,10 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       console.error('Chat error:', error);
     });
 
-    // Загружаем существующие сообщения
+    // Загружаем существующие сообщения только один раз при подключении
     this.loadMessages(sessionId);
     
-    // Добавляем периодическое обновление сообщений как fallback
-    this.startMessagePolling(sessionId);
+    // Polling будет запущен автоматически только при disconnect
   }
   
   toggleChat() {
@@ -375,8 +421,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     // Сохраняем данные пользователя
     this.saveUserData();
     
-    // Обновляем данные пользователя в сессии
-    this.updateSessionUserData();
+    // Обновляем данные пользователя в сессии немедленно (перед отправкой сообщения)
+    this.updateSessionUserData(true);
     
     const messageText = this.newMessage.trim();
     const messageData = {
@@ -488,16 +534,26 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   private pollingInterval: any = null;
 
   private startMessagePolling(sessionId: string) {
+    // Не запускаем polling если WebSocket подключен
+    if (this.isConnected()) {
+      return;
+    }
+    
     // Очищаем предыдущий интервал если есть
     if (this.pollingInterval) {
       clearInterval(this.pollingInterval);
     }
     
-    // Обновляем сообщения каждые 3 секунды
+    // Обновляем сообщения каждые 10 секунд (реже, так как это fallback)
     this.pollingInterval = setInterval(() => {
-      console.log('Polling for new messages...');
-      this.loadMessages(sessionId);
-    }, 3000);
+      // Если WebSocket подключился, останавливаем polling
+      if (this.isConnected()) {
+        this.stopMessagePolling();
+        return;
+      }
+      console.log('Polling for new messages (WebSocket offline)...');
+      this.loadMessages(sessionId, true); // silent mode для polling
+    }, 10000); // Увеличил интервал до 10 секунд
   }
 
   private stopMessagePolling() {
@@ -521,34 +577,56 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   // Автоматическое сохранение при изменении данных
   onNameChange() {
     this.saveUserData();
+    // Обновляем на сервере с debouncing
+    this.updateSessionUserData();
   }
 
   onPhoneChange() {
     this.saveUserData();
+    // Обновляем на сервере с debouncing
+    this.updateSessionUserData();
   }
 
   onEmailChange() {
     this.saveUserData();
+    // Обновляем на сервере с debouncing
+    this.updateSessionUserData();
   }
   
-  private loadMessages(sessionId: string) {
-    console.log('Loading messages for session:', sessionId);
+  private loadMessages(sessionId: string, silent: boolean = false) {
+    if (!silent) {
+      console.log('Loading messages for session:', sessionId);
+    }
     fetch(`${this.API_URL}/chat/messages/${sessionId}`)
       .then(response => {
-        console.log('Messages response status:', response.status);
+        if (!silent) {
+          console.log('Messages response status:', response.status);
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
       })
       .then(messages => {
-        console.log('Loaded messages:', messages);
+        if (!silent) {
+          console.log('Loaded messages:', messages);
+        }
+        
+        const currentMessages = this.messages();
+        
+        // Проверяем, есть ли новые сообщения
+        const newMessages = messages.filter((msg: ChatMessage) => 
+          !currentMessages.some(current => current.id === msg.id)
+        );
+        
+        // Если нет новых сообщений, не обновляем массив (предотвращаем перерисовку)
+        if (newMessages.length === 0 && currentMessages.length > 0) {
+          return; // Выходим, ничего не меняя
+        }
         
         // Проверяем, есть ли новые сообщения от админа
-        const currentMessages = this.messages();
-        const newAdminMessages = messages.filter((msg: ChatMessage) => 
-          msg.senderType === 'admin' && 
-          !currentMessages.some(current => current.id === msg.id)
+        const newAdminMessages = newMessages.filter((msg: ChatMessage) => 
+          msg.senderType === 'admin'
         );
         
         // Воспроизводим звук для новых сообщений от админа
@@ -556,14 +634,33 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
           this.soundService.playMessageSound();
         }
         
-        this.messages.set(messages);
+        // Если это первая загрузка (нет сообщений), устанавливаем все сообщения
+        if (currentMessages.length === 0) {
+          this.messages.set(messages);
+        } else {
+          // Иначе добавляем только новые сообщения (без дублирования)
+          this.messages.update(messages => {
+            const existingIds = new Set(messages.map((m: ChatMessage) => m.id));
+            const toAdd = newMessages.filter((m: ChatMessage) => m.id && !existingIds.has(m.id));
+            return [...messages, ...toAdd].sort((a, b) => {
+              const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+              const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+              return dateA - dateB;
+            });
+          });
+        }
+        
         this.scrollToBottom();
       })
       .catch(error => {
-        console.error('Error loading messages:', error);
-        console.error('Error details:', error.message);
-        // Устанавливаем пустой массив при ошибке
-        this.messages.set([]);
+        if (!silent) {
+          console.error('Error loading messages:', error);
+          console.error('Error details:', error.message);
+        }
+        // Не очищаем сообщения при ошибке, если они уже есть
+        if (this.messages().length === 0) {
+          this.messages.set([]);
+        }
       });
   }
 
@@ -580,5 +677,14 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     if (!date) return '';
     const d = new Date(date);
     return d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  }
+  
+  // Получить логотип компании (первые буквы)
+  getBrandLogo(): string {
+    const words = this.brand.shortName.split(' ');
+    if (words.length >= 2) {
+      return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+    }
+    return this.brand.shortName.substring(0, 2).toUpperCase();
   }
 }
