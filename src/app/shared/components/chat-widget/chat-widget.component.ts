@@ -72,6 +72,10 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   // Brand config для логотипа
   protected readonly brand = BRAND_CONFIG;
   
+  // Дефолтные данные админа
+  protected readonly defaultAdminName = 'Поддержка';
+  protected readonly defaultAdminAvatar = 'П';
+  
   async ngOnInit() {
     await this.initializeFingerprint();
     this.loadUserData();

@@ -44,8 +44,24 @@
       justify-content: center;
     }
 
-    i.fa-times {
-      font-size: 20px;
+    .close-icon {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.open {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+      
+      &:hover {
+        box-shadow: 0 6px 25px rgba(239, 68, 68, 0.4);
+      }
     }
 
     .chat-badge {
@@ -217,14 +233,20 @@
       }
 
       .message {
-        margin-bottom: 16px;
+        margin-bottom: 20px;
         display: flex;
+        align-items: flex-start;
+        gap: 8px;
         animation: messageSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         transform-origin: bottom;
 
         &.client {
           justify-content: flex-end;
           animation: messageSlideInRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+          .message-wrapper {
+            align-items: flex-end;
+          }
 
           .message-content {
             background: linear-gradient(135deg, var(--color-primary, #4f8cff) 0%, var(--color-secondary, #61de9f) 100%);
@@ -237,12 +259,25 @@
               transform: translateY(-1px);
               box-shadow: 0 4px 12px rgba(79, 140, 255, 0.3);
             }
+
+            .message-text {
+              color: white;
+            }
+
+            .message-time {
+              color: rgba(255, 255, 255, 0.9);
+              font-weight: 500;
+            }
           }
         }
 
         &.admin {
           justify-content: flex-start;
           animation: messageSlideInLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+          .message-wrapper {
+            align-items: flex-start;
+          }
 
           .message-content {
             background: white;
@@ -256,25 +291,71 @@
               transform: translateY(-1px);
               box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             }
+
+            .message-text {
+              color: #1a1a1a;
+            }
+
+            .message-time {
+              color: #6b7280;
+              font-weight: 500;
+            }
           }
         }
 
-        .message-content {
-          max-width: 80%;
-          padding: 12px 16px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        .message-avatar {
+          flex-shrink: 0;
+          width: 36px;
+          height: 36px;
 
-        .message-text {
-          font-size: 14px;
-          line-height: 1.4;
-          margin-bottom: 4px;
-          color: #1a1a1a !important; // Темный цвет для лучшей читаемости
-          font-weight: 500;
+          .avatar-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary, #4f8cff) 0%, var(--color-secondary, #61de9f) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(79, 140, 255, 0.3);
+          }
         }
+
+        .message-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          max-width: calc(100% - 44px);
+        }
+
+        .message-sender {
+          font-size: 12px;
+          font-weight: 600;
+          color: #6b7280;
+          padding-left: 4px;
+          margin-bottom: 2px;
+        }
+
+        .message-content {
+          max-width: 100%;
+          padding: 12px 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          .message-text {
+            font-size: 14px;
+            line-height: 1.4;
+            font-weight: 500;
+            word-wrap: break-word;
+          }
 
           .message-time {
             font-size: 11px;
-            opacity: 0.7;
+            align-self: flex-end;
+            margin-top: 2px;
           }
         }
       }
