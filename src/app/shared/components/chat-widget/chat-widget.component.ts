@@ -5,7 +5,7 @@ import { io, Socket } from 'socket.io-client';
 import { FingerprintUtil } from '../../utils/fingerprint.util';
 import { SoundService } from '../../services/sound.service';
 import { BRAND_CONFIG } from '../../../core/constants/brand';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 interface ChatMessage {
   id?: number;
