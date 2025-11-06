@@ -62,4 +62,8 @@ export class AppService {
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
     return `${this.API_URL}${cleanPath}`;
   }
+
+  getUnprocessedLeadsCount(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.API_URL}/leads/stats/unprocessed-count`).pipe(map((res) => res));
+  }
 }

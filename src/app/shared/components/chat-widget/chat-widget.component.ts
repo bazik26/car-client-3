@@ -5,6 +5,7 @@ import { io, Socket } from 'socket.io-client';
 import { FingerprintUtil } from '../../utils/fingerprint.util';
 import { SoundService } from '../../services/sound.service';
 import { BRAND_CONFIG } from '../../../core/constants/brand';
+import { environment } from '../../../environments/environment';
 
 interface ChatMessage {
   id?: number;
@@ -26,6 +27,7 @@ interface ChatSession {
   clientEmail?: string;
   clientPhone?: string;
   projectSource: string;
+  projectId?: 'office_1' | 'office_2';
   isActive?: boolean;
   assignedAdminId?: number;
   lastMessageAt?: Date;
@@ -57,7 +59,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   
   // WebSocket
   private socket: Socket | null = null;
-  private readonly API_URL = 'https://car-api-production.up.railway.app'; // Railway API URL
+  private readonly API_URL = environment.API_URL;
+  private readonly PROJECT_ID = environment.PROJECT_ID || 'office_1';
   
   // Fingerprint
   private fingerprintUtil = FingerprintUtil.getInstance();
@@ -279,6 +282,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     const sessionData: Partial<ChatSession> = {
       sessionId,
       projectSource: 'car-market-client',
+      projectId: this.PROJECT_ID as 'office_1' | 'office_2',
       isActive: true,
       clientName: this.clientName,
       clientEmail: this.clientEmail,
@@ -320,6 +324,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       this.currentSession.set({
         sessionId,
         projectSource: 'car-market-client',
+        projectId: this.PROJECT_ID as 'office_1' | 'office_2',
         isActive: true,
         createdAt: new Date()
       } as ChatSession);
