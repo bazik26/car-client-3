@@ -120,6 +120,7 @@
           class="message-input"
           [disabled]="!isConnected()">
         <button 
+          id="form-submit-btn"
           class="send-button" 
           (click)="sendMessage()"
           [disabled]="!newMessage.trim() || !isConnected()"

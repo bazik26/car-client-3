@@ -52,7 +52,7 @@
         <textarea formControlName="message" rows="4" placeholder="Например: BMW X5 до 3.5 млн, пробег до 80 тыс."></textarea>
       </label>
 
-      <button class="btn-primary" type="submit" [disabled]="sending">
+      <button id="form-submit-btn" class="btn-primary" type="submit" [disabled]="sending">
         {{ sending ? 'Отправляем...' : 'Отправить заявку' }}
       </button>
 
