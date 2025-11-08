@@ -53,7 +53,7 @@
       <div class="mobile-nav__footer">
         <span>{{ brand.phone }}</span>
         <span>{{ brand.email }}</span>
-        <a class="btn-primary" [href]="brand.phoneLink">Позвонить сейчас</a>
+        <span class="btn-primary">{{ brand.phone }}</span>
       </div>
     </div>
   </div>
@@ -75,8 +75,8 @@
     <div class="footer__meta">
       <div>
         <h4>Контакты</h4>
-        <a [href]="brand.phoneLink">{{ brand.phone }}</a>
-        <a [href]="'mailto:' + brand.email">{{ brand.email }}</a>
+        <span>{{ brand.phone }}</span>
+        <span>{{ brand.email }}</span>
       </div>
       <div>
         <h4>Адрес</h4>
