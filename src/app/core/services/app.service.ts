@@ -44,23 +44,58 @@ export class AppService {
     return this.http.post(`${this.API_URL}/contact-us`, payload).pipe(map((res) => res));
   }
 
-  getFileUrl(image: { path?: string; filename?: string }): string {
+  getFileUrl(image: { path?: string; filename?: string; car?: { id?: number } } | string, carId?: number): string {
     if (!image) {
       return '';
     }
 
-    const path = image.path || image.filename || '';
+    // Если это строка, обрабатываем как путь
+    if (typeof image === 'string') {
+      const path = image.trim();
+      if (!path) {
+        return '';
+      }
+      if (/^https?:\/\//i.test(path)) {
+        return path;
+      }
+      // Если это путь вида /cars/123/images/file.jpg, используем как есть
+      if (path.startsWith('/cars/')) {
+        const cleanPath = path.startsWith('/') ? path : `/${path}`;
+        return `${this.API_URL}${cleanPath}`;
+      }
+      // Если это просто filename и есть carId, формируем правильный путь
+      // Используем формат /cars/:carId/:filename согласно контроллеру
+      if (carId) {
+        return `${this.API_URL}/cars/${carId}/${path}`;
+      }
+      const cleanPath = path.startsWith('/') ? path : `/${path}`;
+      return `${this.API_URL}${cleanPath}`;
+    }
 
-    if (!path) {
+    // Если это объект
+    const filename = image.filename || image.path || '';
+    const id = carId || image.car?.id;
+
+    if (!filename) {
       return '';
     }
 
-    if (/^https?:\/\//i.test(path)) {
-      return path;
+    // Если это полный URL, возвращаем как есть
+    if (/^https?:\/\//i.test(filename)) {
+      return filename;
     }
 
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `${this.API_URL}${cleanPath}`;
+    // Если есть carId, формируем правильный путь к изображению
+    // Используем формат /cars/:carId/:filename согласно контроллеру
+    if (id) {
+      return `${this.API_URL}/cars/${id}/${filename}`;
+    }
+
+    // Fallback: используем path как есть
+    const cleanPath = filename.startsWith('/') ? filename : `/${filename}`;
+    const normalizedPath = cleanPath.replace(/\/+/g, '/');
+    
+    return `${this.API_URL}${normalizedPath}`;
   }
 
   getUnprocessedLeadsCount(): Observable<{ count: number }> {

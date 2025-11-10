@@ -1,6 +1,13 @@
 <a class="car-card glass-card" [routerLink]="['/cars', car.id]">
   <div class="car-card__image">
-    <img [ngSrc]="heroImage()" [alt]="car.brand + ' ' + car.model" class="car-card__media" width="400" height="300">
+    <img 
+      [ngSrc]="getImageSrc()" 
+      [alt]="car.brand + ' ' + car.model" 
+      class="car-card__media" 
+      width="400" 
+      height="300"
+      (error)="onImageError()"
+      [ngClass]="{'car-card__media--error': imageError()}">
     <div class="car-card__top">
       <span class="pill" *ngIf="car.drive">{{ car.drive }}</span>
       <span class="pill" *ngIf="car.gearbox">{{ car.gearbox }}</span>

@@ -18,14 +18,26 @@
 
   <div class="container car__gallery">
     <div class="car__gallery-main glass-card">
-      <img [ngSrc]="heroImage()" width="940" height="540" alt="{{ current.brand }} {{ current.model }}" class="car__gallery-image">
+      <img 
+        [ngSrc]="heroImage()" 
+        width="940" 
+        height="540" 
+        [alt]="current.brand + ' ' + current.model" 
+        class="car__gallery-image"
+        (error)="onImageError(activeImage())">
     </div>
     <div class="car__gallery-thumbs">
       <button type="button"
               *ngFor="let image of gallery(); let idx = index"
               [class.active]="idx === activeImage()"
+              [class.error]="imageErrors().has(idx)"
               (click)="selectImage(idx)">
-        <img [ngSrc]="image" width="220" height="140" alt="{{ current.brand }}">
+        <img 
+          [ngSrc]="imageErrors().has(idx) ? '/assets/placeholder/car-dark.svg' : image" 
+          width="220" 
+          height="140" 
+          [alt]="current.brand"
+          (error)="onImageError(idx)">
       </button>
     </div>
   </div>

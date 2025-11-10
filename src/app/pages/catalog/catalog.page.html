@@ -1,9 +1,19 @@
 <section class="catalog">
   <div class="container catalog__layout" [formGroup]="filters">
-    <aside class="catalog__filters glass-card">
+    <!-- Mobile Filters Button -->
+    <button class="catalog__filters-toggle btn-primary" type="button" (click)="toggleFilters()" *ngIf="!filtersOpen()">
+      <span>Фильтры</span>
+      <span class="filters-count" *ngIf="getActiveFiltersCount() > 0">{{ getActiveFiltersCount() }}</span>
+    </button>
+
+    <!-- Mobile Filters Overlay -->
+    <div class="catalog__filters-overlay" [class.catalog__filters-overlay--open]="filtersOpen()" (click)="closeFilters()" *ngIf="filtersOpen()"></div>
+
+    <aside class="catalog__filters glass-card" [class.catalog__filters--mobile-open]="filtersOpen()">
       <header>
-        <h1>Каталог</h1>
+        <h1>Фильтры</h1>
         <p>Комбинируйте фильтры — подбор обновляется без перезагрузки.</p>
+        <button type="button" class="catalog__filters-close" (click)="closeFilters()" aria-label="Закрыть фильтры"></button>
       </header>
 
       <div class="field">
@@ -79,7 +89,10 @@
         </div>
       </div>
 
-      <button class="btn-ghost" type="button" (click)="resetFilters()">Сбросить фильтры</button>
+      <div class="catalog__filters-actions">
+        <button class="btn-ghost" type="button" (click)="resetFilters()">Сбросить фильтры</button>
+        <button class="btn-primary catalog__filters-apply" type="button" (click)="applyFilters()">Применить</button>
+      </div>
     </aside>
 
     <section class="catalog__results">

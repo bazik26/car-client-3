@@ -69,6 +69,13 @@
     width: 100%;
     display: block;
     border-radius: 24px;
+    object-fit: cover;
+
+    &[src*="placeholder"] {
+      object-fit: contain;
+      opacity: 0.5;
+      filter: brightness(0.6);
+    }
   }
 
   &__gallery-thumbs {
@@ -97,6 +104,16 @@
       &:hover {
         border-color: rgba(97, 222, 163, 0.8);
         transform: translateY(-2px);
+      }
+
+      &.error {
+        opacity: 0.5;
+        border-color: rgba(255, 255, 255, 0.2);
+
+        img {
+          filter: brightness(0.6);
+          object-fit: contain;
+        }
       }
     }
   }

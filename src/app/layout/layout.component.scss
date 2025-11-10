@@ -349,12 +349,34 @@
   &__footer {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    .btn-primary {
+      width: 100%;
+      min-height: 48px;
+      justify-content: center;
+    }
+  }
+
+  &__contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     color: var(--color-text-muted);
+    font-size: 0.9rem;
 
     a {
-      margin-top: 10px;
-      text-align: center;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 8px 0;
+      transition: color var(--transition-fast);
+
+      &:hover,
+      &:active {
+        color: var(--color-primary);
+      }
     }
   }
 }
@@ -436,17 +458,28 @@
   }
 
   .header__inner {
-    gap: 20px;
+    gap: 16px;
+  }
+
+  .header__actions {
+    gap: 8px;
+
+    .btn-ghost {
+      display: none;
+    }
   }
 
   .brand {
     gap: 10px;
+    flex: 1;
+    min-width: 0;
 
     &__logo {
       width: 40px;
       height: 40px;
       border-radius: 12px;
       font-size: 0.9rem;
+      flex-shrink: 0;
     }
 
     &__name {
@@ -455,6 +488,7 @@
 
     &__tag {
       font-size: 0.75rem;
+      display: none;
     }
   }
 
@@ -529,7 +563,25 @@
   }
 
   .header__inner {
-    gap: 16px;
+    gap: 12px;
+  }
+
+  .header__actions {
+    gap: 6px;
+
+    .leads-indicator {
+      width: 36px;
+      height: 36px;
+      font-size: 16px;
+
+      .leads-count {
+        font-size: 10px;
+        min-width: 18px;
+        height: 18px;
+        top: -3px;
+        right: -3px;
+      }
+    }
   }
 
   .brand {
@@ -545,7 +597,7 @@
     }
 
     &__tag {
-      font-size: 0.7rem;
+      display: none;
     }
   }
 
