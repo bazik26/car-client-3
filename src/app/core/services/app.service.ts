@@ -58,32 +58,28 @@ export class AppService {
       if (/^https?:\/\//i.test(path)) {
         return path;
       }
-      // Если это путь вида /cars/123/file.jpg, используем как есть
+      // Если это путь вида /cars/001918/file.jpg, используем как есть
       if (path.startsWith('/cars/') || path.startsWith('cars/')) {
         const cleanPath = path.startsWith('/') ? path : `/${path}`;
         return `${this.API_URL}${cleanPath}`;
       }
-      // Если это просто filename и есть carId, формируем путь
+      // Если это просто filename и есть carId, формируем путь с padding
       if (carId) {
         const paddedCarId = String(carId).padStart(6, '0');
         return `${this.API_URL}/cars/${paddedCarId}/${path}`;
       }
-      // Убираем 'images/' из начала пути, так как ServeStaticModule раздаёт файлы из /images по корню
-      let cleanPath = path;
-      if (cleanPath.startsWith('images/')) {
-        cleanPath = cleanPath.replace('images/', '');
-      }
-      const normalizedPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+      // Fallback: используем как есть
+      const normalizedPath = path.startsWith('/') ? path : `/${path}`;
       return `${this.API_URL}${normalizedPath}`;
     }
 
-    // Если это объект
-    if (!image.path && !image.filename) {
-      return '';
-    }
-
+    // Если это объект - используем логику как в car-client
     const path = image.path || image.filename || '';
     const id = carId || image.car?.id;
+
+    if (!path) {
+      return '';
+    }
 
     // Если path содержит старый домен shop-ytb-client, заменяем на наш API
     if (path.includes('shop-ytb-client.onrender.com')) {
@@ -103,14 +99,14 @@ export class AppService {
       return `${this.API_URL}${cleanPath}`;
     }
 
-    // Если есть carId и path - это просто filename, формируем полный путь
+    // Если есть carId и path - это просто имя файла, формируем полный путь с padding
+    // Это соответствует формату контроллера /cars/:carId/:filename
     if (id && path && !path.includes('/')) {
       const paddedCarId = String(id).padStart(6, '0');
       return `${this.API_URL}/cars/${paddedCarId}/${path}`;
     }
 
-    // Относительный путь - добавляем API_URL
-    // Убираем 'images/' из начала пути, так как ServeStaticModule раздаёт файлы из /images по корню
+    // Fallback: используем логику как в car-client - убираем images/ если есть
     let cleanPath = path;
     if (cleanPath.startsWith('images/')) {
       cleanPath = cleanPath.replace('images/', '');
