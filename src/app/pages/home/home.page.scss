@@ -181,14 +181,17 @@
   
   .car-img {
     width: 100%;
-    height: 120px;
+    height: 200px;
     object-fit: cover;
+    object-position: center;
     transition: var(--transition-slow);
   }
   
   @media (max-width: 768px) {
     .car-img {
-      object-fit: contain;
+      height: 180px;
+      object-fit: cover;
+      object-position: center;
       background: rgba(255, 255, 255, 0.02);
     }
   }
@@ -488,7 +491,7 @@
     .stat-car-image {
       position: relative;
       width: 100%;
-      height: 140px;
+      height: 180px;
       overflow: hidden;
       background: rgba(255, 255, 255, 0.04);
 
@@ -496,6 +499,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center;
         transition: transform var(--transition-slow);
       }
     }
@@ -1194,8 +1198,9 @@
           margin-bottom: 0.5rem;
           
           .car-img {
-            height: 200px;
-            object-fit: contain;
+            height: 250px;
+            object-fit: cover;
+            object-position: center;
             background: rgba(255, 255, 255, 0.02);
           }
           
@@ -1428,7 +1433,9 @@
         
         .car-image {
           .car-img {
-            height: 180px;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
           }
           
           .car-badge {
@@ -1507,7 +1514,7 @@
       padding: 0;
 
       .stat-car-image {
-        height: 120px;
+        height: 150px;
       }
 
       .stat-number {
