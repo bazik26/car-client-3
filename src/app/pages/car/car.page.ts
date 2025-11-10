@@ -53,6 +53,13 @@ export class CarPage implements OnInit, OnDestroy {
   protected activeImage = signal(0);
   protected imageErrors = signal<Set<number>>(new Set());
   
+  // Для свайп-жестов
+  private touchStartX = 0;
+  private touchStartY = 0;
+  private touchEndX = 0;
+  private touchEndY = 0;
+  private minSwipeDistance = 50;
+  
   protected heroImage = computed(() => {
     const images = this.gallery();
     const index = this.activeImage();
@@ -78,6 +85,55 @@ export class CarPage implements OnInit, OnDestroy {
       newErrors.delete(index);
       return newErrors;
     });
+  }
+
+  // Навигация по изображениям
+  nextImage(): void {
+    const images = this.gallery();
+    if (images.length > 0) {
+      const current = this.activeImage();
+      const next = (current + 1) % images.length;
+      this.selectImage(next);
+    }
+  }
+
+  prevImage(): void {
+    const images = this.gallery();
+    if (images.length > 0) {
+      const current = this.activeImage();
+      const prev = current === 0 ? images.length - 1 : current - 1;
+      this.selectImage(prev);
+    }
+  }
+
+  // Обработчики для свайп-жестов
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].screenX;
+    this.touchStartY = event.changedTouches[0].screenY;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.touchEndY = event.changedTouches[0].screenY;
+    this.handleSwipe();
+  }
+
+  private handleSwipe(): void {
+    const deltaX = this.touchEndX - this.touchStartX;
+    const deltaY = this.touchEndY - this.touchStartY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // Проверяем, что свайп горизонтальный и достаточно длинный
+    if (absDeltaX > this.minSwipeDistance && absDeltaX > absDeltaY) {
+      if (deltaX > 0) {
+        // Свайп вправо - предыдущее изображение
+        this.prevImage();
+      } else {
+        // Свайп влево - следующее изображение
+        this.nextImage();
+      }
+    }
   }
 
   protected featureGroups = computed(() => {
