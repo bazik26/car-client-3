@@ -63,19 +63,13 @@ export class AppService {
         const cleanPath = path.startsWith('/') ? path : `/${path}`;
         return `${this.API_URL}${cleanPath}`;
       }
-      // Если это просто filename и есть carId, формируем путь с padding
-      if (carId) {
-        const paddedCarId = String(carId).padStart(6, '0');
-        return `${this.API_URL}/cars/${paddedCarId}/${path}`;
-      }
-      // Fallback: используем как есть
+      // Fallback: используем как есть (ServeStaticModule раздает файлы из /images по корню)
       const normalizedPath = path.startsWith('/') ? path : `/${path}`;
       return `${this.API_URL}${normalizedPath}`;
     }
 
     // Если это объект - используем логику как в car-client
     const path = image.path || image.filename || '';
-    const id = carId || image.car?.id;
 
     if (!path) {
       return '';
@@ -99,14 +93,8 @@ export class AppService {
       return `${this.API_URL}${cleanPath}`;
     }
 
-    // Если есть carId и path - это просто имя файла, формируем полный путь с padding
-    // Это соответствует формату контроллера /cars/:carId/:filename
-    if (id && path && !path.includes('/')) {
-      const paddedCarId = String(id).padStart(6, '0');
-      return `${this.API_URL}/cars/${paddedCarId}/${path}`;
-    }
-
-    // Fallback: используем логику как в car-client - убираем images/ если есть
+    // Относительный путь - добавляем API_URL
+    // Убираем 'images/' из начала пути, так как ServeStaticModule раздаёт файлы из /images по корню
     let cleanPath = path;
     if (cleanPath.startsWith('images/')) {
       cleanPath = cleanPath.replace('images/', '');
