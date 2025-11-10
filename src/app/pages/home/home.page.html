@@ -152,7 +152,7 @@
     <div class="best-offer__content" *ngIf="bestOffer(); else fallbackOffer">
       <div class="best-offer__car">
         <div class="car-image-large">
-          <img [ngSrc]="getCarImageUrl(bestOffer())" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" width="800" height="500" class="car-img-large">
+          <img [ngSrc]="getImageSrc(bestOffer())" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" width="800" height="500" class="car-img-large" (error)="onImageError(bestOffer()?.id)" [ngClass]="{'car-img-large--error': imageError().has(bestOffer()?.id)}">
           <div class="car-badge-large">Лучшая цена</div>
         </div>
         <div class="car-details">
@@ -199,7 +199,7 @@
       <div class="best-offer__content">
         <div class="best-offer__car">
         <div class="car-image-large">
-          <img [ngSrc]="getCarImageUrl(fallbackCar())" [alt]="fallbackCar()?.brand + ' ' + fallbackCar()?.model" width="800" height="500" class="car-img-large">
+          <img [ngSrc]="getImageSrc(fallbackCar())" [alt]="fallbackCar()?.brand + ' ' + fallbackCar()?.model" width="800" height="500" class="car-img-large" (error)="onImageError(fallbackCar()?.id)" [ngClass]="{'car-img-large--error': imageError().has(fallbackCar()?.id)}">
           <div class="car-badge-large">Популярный выбор</div>
         </div>
           <div class="car-details">

@@ -63,6 +63,11 @@ export class AppService {
         const cleanPath = path.startsWith('/') ? path : `/${path}`;
         return `${this.API_URL}${cleanPath}`;
       }
+      // Если это просто имя файла (без слешей) и есть carId, формируем путь с padding
+      if (carId && !path.includes('/') && !path.startsWith('images/')) {
+        const paddedCarId = String(carId).padStart(6, '0');
+        return `${this.API_URL}/cars/${paddedCarId}/${path}`;
+      }
       // Fallback: используем как есть (ServeStaticModule раздает файлы из /images по корню)
       const normalizedPath = path.startsWith('/') ? path : `/${path}`;
       return `${this.API_URL}${normalizedPath}`;
@@ -91,6 +96,13 @@ export class AppService {
     if (path.includes('cars/') || path.startsWith('/cars/')) {
       const cleanPath = path.startsWith('/') ? path : `/${path}`;
       return `${this.API_URL}${cleanPath}`;
+    }
+
+    // Если это просто имя файла (без слешей) и есть carId, формируем путь с padding
+    // Файлы находятся в images/cars/001912/filename.jpg, доступны через /cars/001912/filename.jpg
+    if (carId && !path.includes('/') && !path.startsWith('images/')) {
+      const paddedCarId = String(carId).padStart(6, '0');
+      return `${this.API_URL}/cars/${paddedCarId}/${path}`;
     }
 
     // Относительный путь - добавляем API_URL

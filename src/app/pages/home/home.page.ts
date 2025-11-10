@@ -243,12 +243,33 @@ export class HomePage implements OnInit {
   getCarImageUrl(car: any): string {
     if (!car) return '/assets/placeholder/car-dark.svg';
     const files = car.files || car.images || [];
-    if (files.length === 0) return '/assets/placeholder/car-dark.svg';
+    if (!files || !Array.isArray(files) || files.length === 0) {
+      return '/assets/placeholder/car-dark.svg';
+    }
     const firstFile = files[0];
     if (typeof firstFile === 'string') {
-      return this.appService.getFileUrl(firstFile, car.id);
+      const url = this.appService.getFileUrl(firstFile, car.id);
+      return url || '/assets/placeholder/car-dark.svg';
     }
-    return this.appService.getFileUrl(firstFile, car.id) || '/assets/placeholder/car-dark.svg';
+    if (typeof firstFile === 'object' && firstFile !== null) {
+      const url = this.appService.getFileUrl(firstFile, car.id);
+      return url || '/assets/placeholder/car-dark.svg';
+    }
+    return '/assets/placeholder/car-dark.svg';
+  }
+
+  protected imageError = signal<Set<number>>(new Set());
+
+  onImageError(carId: number): void {
+    this.imageError.update(errors => new Set([...errors, carId]));
+  }
+
+  getImageSrc(car: any): string {
+    if (!car) return '/assets/placeholder/car-dark.svg';
+    if (this.imageError().has(car.id)) {
+      return '/assets/placeholder/car-dark.svg';
+    }
+    return this.getCarImageUrl(car);
   }
 
   getDiscountedPrice(price: number, discountPercent: number): number {
