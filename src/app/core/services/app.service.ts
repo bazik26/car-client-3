@@ -44,12 +44,12 @@ export class AppService {
     return this.http.post(`${this.API_URL}/contact-us`, payload).pipe(map((res) => res));
   }
 
-  getFileUrl(image: { path?: string; filename?: string; car?: { id?: number } } | string, carId?: number): string {
+  getFileUrl(image: any, carId?: number): string {
     if (!image) {
       return '';
     }
 
-    // Если это строка, обрабатываем как путь
+    // Если это строка, обрабатываем как путь (для обратной совместимости)
     if (typeof image === 'string') {
       const path = image.trim();
       if (!path) {
@@ -97,19 +97,6 @@ export class AppService {
     // Если полный URL (другой домен) - используем как есть
     if (path.startsWith('http')) {
       return path;
-    }
-
-    // Если path уже содержит путь к папке cars, используем как есть
-    if (path.includes('cars/') || path.startsWith('/cars/')) {
-      const cleanPath = path.startsWith('/') ? path : `/${path}`;
-      return `${this.API_URL}${cleanPath}`;
-    }
-
-    // Если это просто имя файла (без слешей) и есть carId, формируем путь с padding
-    // Файлы находятся в images/cars/001912/filename.jpg, доступны через /cars/001912/filename.jpg
-    if (carId && !path.includes('/') && !path.startsWith('images/')) {
-      const paddedCarId = String(carId).padStart(6, '0');
-      return `${this.API_URL}/cars/${paddedCarId}/${path}`;
     }
 
     // Относительный путь - добавляем API_URL
