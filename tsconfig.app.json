@@ -4,12 +4,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
+    "baseUrl": "./",
     "types": [
       "node"
     ],
     "paths": {
       "@cars/chat-widget-lib": [
-        "../chat-widget-lib/src/public-api.ts",
         "node_modules/@cars/chat-widget-lib/src/public-api.ts"
       ]
     }
