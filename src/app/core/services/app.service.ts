@@ -55,6 +55,13 @@ export class AppService {
       if (!path) {
         return '';
       }
+      // Если path содержит старый домен shop-ytb-client, заменяем на наш API
+      if (path.includes('shop-ytb-client.onrender.com')) {
+        const relativePath = path.replace(/https?:\/\/shop-ytb-client\.onrender\.com/, '');
+        const normalizedPath = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
+        return `${this.API_URL}${normalizedPath}`;
+      }
+      // Если полный URL (другой домен) - используем как есть
       if (/^https?:\/\//i.test(path)) {
         return path;
       }
