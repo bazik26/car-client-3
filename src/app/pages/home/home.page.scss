@@ -440,6 +440,99 @@
     color: var(--color-text-muted);
     font-weight: 500;
   }
+
+  &--car {
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    background: rgba(20, 26, 38, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(79, 140, 255, 0.3);
+      border-color: rgba(79, 140, 255, 0.4);
+    }
+
+    .stat-car-image {
+      position: relative;
+      width: 100%;
+      height: 140px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+
+      .stat-car-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-slow);
+      }
+    }
+
+    &:hover .stat-car-img {
+      transform: scale(1.05);
+    }
+
+    .stat-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      z-index: 2;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      &--discount {
+        background: rgba(255, 20, 147, 0.9);
+        color: #ffffff;
+      }
+
+      &--new {
+        background: rgba(97, 222, 163, 0.9);
+        color: #0d1018;
+      }
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin: 12px 0 4px;
+      padding: 0 12px;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 4px;
+      padding: 0 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .stat-detail {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      padding: 0 12px 12px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+  }
 }
 
 .feature-card {
@@ -1295,6 +1388,37 @@
   
   .stat-card {
     padding: 0.75rem;
+
+    &--car {
+      padding: 0;
+
+      .stat-car-image {
+        height: 120px;
+      }
+
+      .stat-number {
+        font-size: 1.3rem;
+        margin: 10px 0 3px;
+        padding: 0 10px;
+      }
+
+      .stat-label {
+        font-size: 0.85rem;
+        padding: 0 10px;
+      }
+
+      .stat-detail {
+        font-size: 0.7rem;
+        padding: 0 10px 10px;
+      }
+
+      .stat-badge {
+        top: 6px;
+        right: 6px;
+        padding: 3px 8px;
+        font-size: 0.65rem;
+      }
+    }
     
     .stat-number {
       font-size: clamp(1.5rem, 8vw, 1.75rem);

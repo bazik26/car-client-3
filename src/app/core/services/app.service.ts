@@ -58,43 +58,64 @@ export class AppService {
       if (/^https?:\/\//i.test(path)) {
         return path;
       }
-      // Если это путь вида /cars/123/images/file.jpg, используем как есть
-      if (path.startsWith('/cars/')) {
+      // Если это путь вида /cars/123/file.jpg, используем как есть
+      if (path.startsWith('/cars/') || path.startsWith('cars/')) {
         const cleanPath = path.startsWith('/') ? path : `/${path}`;
         return `${this.API_URL}${cleanPath}`;
       }
-      // Если это просто filename и есть carId, формируем правильный путь
-      // Используем формат /cars/:carId/:filename согласно контроллеру
+      // Если это просто filename и есть carId, формируем путь
       if (carId) {
-        return `${this.API_URL}/cars/${carId}/${path}`;
+        const paddedCarId = String(carId).padStart(6, '0');
+        return `${this.API_URL}/cars/${paddedCarId}/${path}`;
       }
+      // Убираем 'images/' из начала пути, так как ServeStaticModule раздаёт файлы из /images по корню
+      let cleanPath = path;
+      if (cleanPath.startsWith('images/')) {
+        cleanPath = cleanPath.replace('images/', '');
+      }
+      const normalizedPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+      return `${this.API_URL}${normalizedPath}`;
+    }
+
+    // Если это объект
+    if (!image.path && !image.filename) {
+      return '';
+    }
+
+    const path = image.path || image.filename || '';
+    const id = carId || image.car?.id;
+
+    // Если path содержит старый домен shop-ytb-client, заменяем на наш API
+    if (path.includes('shop-ytb-client.onrender.com')) {
+      const relativePath = path.replace(/https?:\/\/shop-ytb-client\.onrender\.com/, '');
+      const normalizedPath = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
+      return `${this.API_URL}${normalizedPath}`;
+    }
+
+    // Если полный URL (другой домен) - используем как есть
+    if (path.startsWith('http')) {
+      return path;
+    }
+
+    // Если path уже содержит путь к папке cars, используем как есть
+    if (path.includes('cars/') || path.startsWith('/cars/')) {
       const cleanPath = path.startsWith('/') ? path : `/${path}`;
       return `${this.API_URL}${cleanPath}`;
     }
 
-    // Если это объект
-    const filename = image.filename || image.path || '';
-    const id = carId || image.car?.id;
-
-    if (!filename) {
-      return '';
+    // Если есть carId и path - это просто filename, формируем полный путь
+    if (id && path && !path.includes('/')) {
+      const paddedCarId = String(id).padStart(6, '0');
+      return `${this.API_URL}/cars/${paddedCarId}/${path}`;
     }
 
-    // Если это полный URL, возвращаем как есть
-    if (/^https?:\/\//i.test(filename)) {
-      return filename;
+    // Относительный путь - добавляем API_URL
+    // Убираем 'images/' из начала пути, так как ServeStaticModule раздаёт файлы из /images по корню
+    let cleanPath = path;
+    if (cleanPath.startsWith('images/')) {
+      cleanPath = cleanPath.replace('images/', '');
     }
-
-    // Если есть carId, формируем правильный путь к изображению
-    // Используем формат /cars/:carId/:filename согласно контроллеру
-    if (id) {
-      return `${this.API_URL}/cars/${id}/${filename}`;
-    }
-
-    // Fallback: используем path как есть
-    const cleanPath = filename.startsWith('/') ? filename : `/${filename}`;
-    const normalizedPath = cleanPath.replace(/\/+/g, '/');
-    
+    const normalizedPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
     return `${this.API_URL}${normalizedPath}`;
   }
 

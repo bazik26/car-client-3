@@ -1,13 +1,9 @@
-import { Component, HostListener, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { interval, Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 import { BRAND_CONFIG } from '../core/constants/brand';
 import { ChatWidgetComponent } from '../shared/components/chat-widget/chat-widget.component';
-import { AppService } from '../core/services/app.service';
 
 @Component({
   selector: 'app-layout',
@@ -16,41 +12,12 @@ import { AppService } from '../core/services/app.service';
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
-export class LayoutComponent implements OnInit, OnDestroy {
+export class LayoutComponent {
   protected readonly brand = BRAND_CONFIG;
   protected isCompactHeader = false;
   protected mobileNav = false;
   protected readonly currentYear = new Date().getFullYear();
   private readonly router = inject(Router);
-  private readonly appService = inject(AppService);
-  protected unprocessedLeadsCount = signal(0);
-  private leadsCheckSubscription?: Subscription;
-
-  ngOnInit(): void {
-    // Проверяем количество необработанных лидов сразу
-    this.checkUnprocessedLeads();
-    
-    // Проверяем каждые 30 секунд
-    this.leadsCheckSubscription = interval(30000).subscribe(() => {
-      this.checkUnprocessedLeads();
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.leadsCheckSubscription) {
-      this.leadsCheckSubscription.unsubscribe();
-    }
-  }
-
-  private checkUnprocessedLeads(): void {
-    this.appService.getUnprocessedLeadsCount().pipe(
-      catchError(() => of({ count: 0 }))
-    ).subscribe({
-      next: (response) => {
-        this.unprocessedLeadsCount.set(response.count || 0);
-      }
-    });
-  }
 
   @HostListener('window:scroll')
   onScroll() {

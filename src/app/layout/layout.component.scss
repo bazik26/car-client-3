@@ -111,102 +111,7 @@
   gap: 12px;
 }
 
-.leads-indicator {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: #ffffff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-  animation: leadsPulse 2s ease-in-out infinite;
 
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
-  }
-
-  .leads-icon {
-    font-size: 20px;
-    font-weight: 700;
-    z-index: 2;
-    position: relative;
-    line-height: 1;
-  }
-
-  .leads-count {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background: #ffffff;
-    color: #ef4444;
-    font-size: 11px;
-    font-weight: 700;
-    min-width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 6px;
-    border: 2px solid #ef4444;
-    z-index: 3;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .leads-pulse {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    background: rgba(239, 68, 68, 0.4);
-    animation: leadsRipple 2s ease-out infinite;
-    z-index: 1;
-  }
-
-  &--active {
-    animation: leadsPulseActive 1.5s ease-in-out infinite;
-  }
-}
-
-@keyframes leadsPulse {
-  0%, 100% {
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-  }
-  50% {
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
-  }
-}
-
-@keyframes leadsPulseActive {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.7);
-  }
-}
-
-@keyframes leadsRipple {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.5);
-    opacity: 0;
-  }
-}
 
 .burger {
   background: none;
@@ -569,19 +474,6 @@
   .header__actions {
     gap: 6px;
 
-    .leads-indicator {
-      width: 36px;
-      height: 36px;
-      font-size: 16px;
-
-      .leads-count {
-        font-size: 10px;
-        min-width: 18px;
-        height: 18px;
-        top: -3px;
-        right: -3px;
-      }
-    }
   }
 
   .brand {

@@ -17,13 +17,6 @@
     </nav>
 
     <div class="header__actions">
-      @if (unprocessedLeadsCount() > 0) {
-        <div class="leads-indicator" [class.leads-indicator--active]="unprocessedLeadsCount() > 0" title="Есть необработанные лиды">
-          <span class="leads-icon">!</span>
-          <span class="leads-count">{{ unprocessedLeadsCount() }}</span>
-          <div class="leads-pulse"></div>
-        </div>
-      }
       <button class="btn-ghost" type="button" (click)="navigate('contact-form')">
         <span>Получить подбор</span>
       </button>

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { take } from 'rxjs';
@@ -19,7 +19,7 @@ interface ShowcaseFilter {
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, CarCardComponent],
+  imports: [CommonModule, RouterLink, CarCardComponent, NgOptimizedImage],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss'
 })
@@ -238,5 +238,21 @@ export class HomePage implements OnInit {
       .map((item) => ({ item, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ item }) => item);
+  }
+
+  getCarImageUrl(car: any): string {
+    if (!car) return '/assets/placeholder/car-dark.svg';
+    const files = car.files || car.images || [];
+    if (files.length === 0) return '/assets/placeholder/car-dark.svg';
+    const firstFile = files[0];
+    if (typeof firstFile === 'string') {
+      return this.appService.getFileUrl(firstFile, car.id);
+    }
+    return this.appService.getFileUrl(firstFile, car.id) || '/assets/placeholder/car-dark.svg';
+  }
+
+  getDiscountedPrice(price: number, discountPercent: number): number {
+    if (!price) return 0;
+    return Math.round(price * (1 - discountPercent / 100));
   }
 }
