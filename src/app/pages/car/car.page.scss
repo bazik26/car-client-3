@@ -63,13 +63,22 @@
   &__gallery-main {
     border-radius: var(--radius-lg);
     padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    background: rgba(255, 255, 255, 0.02);
   }
 
   &__gallery-image {
     width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 600px;
     display: block;
     border-radius: 24px;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
 
     &[src*="placeholder"] {
       object-fit: contain;
@@ -97,7 +106,9 @@
         border-radius: 14px;
         width: 180px;
         height: 120px;
-        object-fit: cover;
+        object-fit: contain;
+        object-position: center;
+        background: rgba(255, 255, 255, 0.02);
       }
 
       &.active,
@@ -245,8 +256,14 @@
 }
 
 @media (max-width: 640px) {
+  .car__gallery-main {
+    min-height: 300px;
+    padding: 8px;
+  }
+
   .car__gallery-image {
     border-radius: 18px;
+    max-height: 400px;
   }
 
   .car__gallery-thumbs button img {
