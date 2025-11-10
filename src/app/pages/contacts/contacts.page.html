@@ -2,7 +2,7 @@
   <div class="container contacts__layout">
     <div class="contacts__info glass-card">
       <span class="pill">Связаться с нами</span>
-      <h1>Prime Auto Hub</h1>
+      <h1>{{ brand.name }}</h1>
       <p>Расскажите о задаче — и мы подготовим прозрачный план с бюджетом и сроками. Менеджер свяжется в течение
         60 минут в рабочее время.</p>
 
@@ -18,6 +18,10 @@
         <div>
           <h3>Адрес</h3>
           <p>{{ brand.address }}</p>
+        </div>
+        <div *ngIf="brand.inn">
+          <h3>ИНН</h3>
+          <span>{{ brand.inn }}</span>
         </div>
       </div>
     </div>
