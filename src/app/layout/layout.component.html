@@ -47,10 +47,16 @@
         <button class="btn-primary" type="button" (click)="navigate('contact-form'); closeMobileNav()">
           Получить подбор
         </button>
-        <div class="mobile-nav__contacts">
-          <a href="tel:{{ brand.phone }}" (click)="closeMobileNav()">{{ brand.phone }}</a>
-          <a href="mailto:{{ brand.email }}" (click)="closeMobileNav()">{{ brand.email }}</a>
-        </div>
+        @if (brand.phone || brand.email) {
+          <div class="mobile-nav__contacts">
+            @if (brand.phone) {
+              <a [href]="brand.phoneLink" (click)="closeMobileNav()">{{ brand.phone }}</a>
+            }
+            @if (brand.email) {
+              <a [href]="'mailto:' + brand.email" (click)="closeMobileNav()">{{ brand.email }}</a>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>
