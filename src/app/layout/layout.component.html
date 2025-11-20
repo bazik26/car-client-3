@@ -63,23 +63,38 @@
 <footer class="footer">
   <div class="container footer__inner">
     <div class="footer__brand">
-      <span class="brand__logo">AZ</span>
-      <div>
+      <div class="footer__logo-wrapper">
+        <span class="brand__logo brand__logo--large">AZ</span>
+      </div>
+      <div class="footer__brand-info">
         <p class="footer__title">{{ brand.name }}</p>
-        <p class="footer__text">Европейские автомобили с гарантией прозрачности сделки.</p>
+        <p class="footer__subtitle">{{ brand.shortName }}</p>
+        <p class="footer__text">Европейские автомобили с гарантией прозрачности сделки</p>
+        <div class="footer__legal">
+          <span>ИНН: {{ brand.inn }}</span>
+        </div>
       </div>
     </div>
+    
     <div class="footer__meta">
-      <div>
-        <h4>Контакты</h4>
-        <span>{{ brand.phone }}</span>
-        <span>{{ brand.email }}</span>
-      </div>
-      <div>
+      @if (brand.phone || brand.email) {
+        <div class="footer__section">
+          <h4>Контакты</h4>
+          @if (brand.phone) {
+            <a [href]="brand.phoneLink">{{ brand.phone }}</a>
+          }
+          @if (brand.email) {
+            <a [href]="'mailto:' + brand.email">{{ brand.email }}</a>
+          }
+        </div>
+      }
+      
+      <div class="footer__section">
         <h4>Адрес</h4>
         <p>{{ brand.address }}</p>
       </div>
-      <div>
+      
+      <div class="footer__section">
         <h4>Навигация</h4>
         <a routerLink="/home">Главная</a>
         <a routerLink="/catalog">Каталог</a>
@@ -87,8 +102,13 @@
       </div>
     </div>
   </div>
-  <div class="footer__copyright">
-    © {{ currentYear }} {{ brand.name }}. Все права защищены.
+  
+  <div class="footer__bottom">
+    <div class="container">
+      <div class="footer__copyright">
+        <span>© {{ currentYear }} {{ brand.name }}. Все права защищены.</span>
+      </div>
+    </div>
   </div>
 </footer>
 

@@ -1,32 +1,21 @@
 export const BRAND_CONFIG = {
-  name: 'ООО "АвтоЗнатоки"',
+  name: 'ООО "Автодом"',
   shortName: 'АвтоЗнатоки',
-  email: 'auto-c-cars@yandex.ru',
-  phone: '+7 (985) 263-41-64',
-  phoneLink: 'tel:+79852634164',
+  email: undefined,
+  phone: undefined,
+  phoneLink: undefined,
   currency: '₽',
-  address: '183039, Мурманская область, г. Мурманск, ул. Академика Книповича, д. 23, офис 119',
-  city: 'Мурманск',
-  region: 'Мурманская область',
+  address: '625033, Тюменская область, г Тюмень, ул Николая Ростовцева, д. 24 к. 1, кв. 35',
+  city: 'Тюмень',
+  region: 'Тюменская область',
   country: 'Россия',
   inn: '6658571727',
+  registrationDate: '29.03.2024',
+  authorizedCapital: '1 000 000 руб.',
   website: 'https://avtoznatoki.ru',
   ogImage: '/assets/og/avtoznatoki.svg',
   coordinates: {
-    latitude: 68.9585,
-    longitude: 33.0827
-  },
-  // Дополнительный офис
-  offices: [
-    {
-      city: 'Мурманск',
-      address: '183039, Мурманская область, г. Мурманск, ул. Академика Книповича, д. 23, офис 119',
-      coordinates: { latitude: 68.9585, longitude: 33.0827 }
-    },
-    {
-      city: 'Екатеринбург',
-      address: '620026, Свердловская область, г. Екатеринбург, ул. Белинского, д. 83, офис 416',
-      coordinates: { latitude: 56.8389, longitude: 60.6057 }
-    }
-  ]
+    latitude: 57.1522,
+    longitude: 65.5272
+  }
 } as const;
