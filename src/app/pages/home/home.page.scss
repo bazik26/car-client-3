@@ -802,18 +802,26 @@
 }
 
 .feature-icon-large {
-  width: 4rem;
-  height: 4rem;
+  width: 4.5rem;
+  height: 4.5rem;
   background: var(--gradient-primary);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1rem;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   
   i {
-    font-size: 1.5rem;
-    color: var(--color-bg);
+    font-size: 2rem;
+    color: #ffffff;
+    font-weight: 400;
+  }
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   }
 }
 
