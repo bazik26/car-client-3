@@ -813,8 +813,14 @@
   box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
   transition: all 0.3s ease;
   
+  .icon-emoji {
+    font-size: 2.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+  
   i {
-    font-size: 2.2rem;
+    font-size: 2rem;
     color: #ffffff;
   }
   
