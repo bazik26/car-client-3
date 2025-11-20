@@ -1,0 +1,31 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Градиентный фон -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Фон -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Логотип круг -->
+  <circle cx="250" cy="315" r="120" fill="url(#logoGrad)"/>
+  
+  <!-- Буквы AZ на логотипе -->
+  <text x="210" y="350" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white">AZ</text>
+  
+  <!-- Текст -->
+  <text x="420" y="300" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="white">
+    АвтоЗнатоки
+  </text>
+  <text x="420" y="360" font-family="Arial, sans-serif" font-size="32" fill="#94a3b8">
+    Европейские автомобили с прозрачной историей
+  </text>
+</svg>
+
