@@ -31,7 +31,7 @@
       </div>
       
       <div class="hero__stats">
-        <a class="stat-card stat-card--car" *ngIf="highlighted()[0] as car1" [routerLink]="['/cars', car1.id]">
+        <a class="stat-card stat-card--car" *ngIf="highlighted()[0] as car1" [routerLink]="['/cars', car1.id]" target="_blank">
           <div class="stat-car-image">
             <img [ngSrc]="getCarImageUrl(car1)" [alt]="car1.brand + ' ' + car1.model" width="200" height="120" class="stat-car-img">
           </div>
@@ -39,7 +39,7 @@
           <div class="stat-label">{{ car1.brand }} {{ car1.model }}</div>
           <div class="stat-detail">{{ car1.engine }}л • {{ car1.gearbox }} • {{ car1.drive }}</div>
         </a>
-        <a class="stat-card stat-card--car" *ngIf="highlighted()[1] as car2" [routerLink]="['/cars', car2.id]">
+        <a class="stat-card stat-card--car" *ngIf="highlighted()[1] as car2" [routerLink]="['/cars', car2.id]" target="_blank">
           <div class="stat-car-image">
             <img [ngSrc]="getCarImageUrl(car2)" [alt]="car2.brand + ' ' + car2.model" width="200" height="120" class="stat-car-img">
             <div class="stat-badge stat-badge--discount">Скидка 15%</div>
@@ -48,7 +48,7 @@
           <div class="stat-label">{{ car2.brand }} {{ car2.model }}</div>
           <div class="stat-detail">{{ car2.engine }}л • {{ car2.gearbox }} • {{ car2.drive }}</div>
         </a>
-        <a class="stat-card stat-card--car" *ngIf="highlighted()[2] as car3" [routerLink]="['/cars', car3.id]">
+        <a class="stat-card stat-card--car" *ngIf="highlighted()[2] as car3" [routerLink]="['/cars', car3.id]" target="_blank">
           <div class="stat-car-image">
             <img [ngSrc]="getCarImageUrl(car3)" [alt]="car3.brand + ' ' + car3.model" width="200" height="120" class="stat-car-img">
             <div class="stat-badge stat-badge--new">Новинка</div>
@@ -184,14 +184,14 @@
         </div>
       </div>
       <div class="best-offer__actions">
-        <button class="btn btn--primary btn--large" [routerLink]="['/cars', bestOffer()?.id]">
+        <a class="btn btn--primary btn--large" [routerLink]="['/cars', bestOffer()?.id]" target="_blank">
           <i class="fas fa-eye"></i>
           Подробнее о машине
-        </button>
-        <button class="btn btn--secondary btn--large" routerLink="/catalog">
+        </a>
+        <a class="btn btn--secondary btn--large" routerLink="/catalog">
           <i class="fas fa-search"></i>
           Смотреть все авто
-        </button>
+        </a>
       </div>
     </div>
     
