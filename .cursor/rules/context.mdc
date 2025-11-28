@@ -1,0 +1,24 @@
+---
+description: >
+  Notes for the SSR-enabled Angular client used by Office 2 testing.
+appliesTo:
+  - car-client-3/**
+---
+
+# SSR Angular App
+
+- **Stack**: Angular 20 with Angular Universal (`@angular/ssr`), Express server entry (`server.ts`), and Socket.IO client for realtime widgets.
+- **Routing**: `app.routes.ts` defines the public flow (`/home`, `/catalog`, `/cars/:id`, `/contacts`, `/city/:slug`) under a shared layout; server-specific routes live in `app.routes.server.ts`.
+- **Structure**: Feature code lives in `pages/**`; shared UI and utilities reside in `shared/components` and `shared/utils`. Backend calls use services inside `core/services`.
+- **Environment**: `environment.ts` adds `SITE_URL` and `PROJECT_ID`; keep `PROJECT_ID` in sync with the office this build serves to respect multi-office separation.
+
+# API Integration
+
+- `core/services/app.service.ts` mirrors other clients but uses `HttpParams` for cleaner SSR-safe query construction. Use it for all data fetching to avoid duplicating URL logic.
+- `getFileUrl` handles absolute vs relative image paths—reuse when rendering media.
+- Additional endpoints include `getSoldCars` and `getUnprocessedLeadsCount` for dashboard badges/chat prompts; ensure new endpoints continue to obey office scoping.
+
+# SSR Considerations
+
+- Use dependency injection-friendly patterns (`inject(HttpClient)`) and avoid direct browser globals in shared code; wrap any DOM usage in platform checks or move to client-only components.
+- Build for production via `ng build --configuration production` followed by `node dist/car-market-client/server/server.mjs` (see `serve:ssr:car-market-client`).
