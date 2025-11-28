@@ -18,7 +18,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.get('/', (_req, res, next) => {
-  res.type('text/plain').send('Prime Auto Hub server is running');
+  res.type('text/plain').send('АвтоЗнатоки server is running');
 });
 app.use(
   express.static(browserDistFolder, {

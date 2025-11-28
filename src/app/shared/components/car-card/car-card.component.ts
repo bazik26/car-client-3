@@ -20,6 +20,8 @@ export class CarCardComponent {
   @Input()
   set car(value: any) {
     this._car.set(value);
+    // Сбрасываем ошибку при изменении автомобиля
+    this.imageError.set(false);
   }
 
   get car() {
@@ -28,11 +30,49 @@ export class CarCardComponent {
 
   heroImage = computed(() => {
     const car = this._car();
-    if (!car?.files?.length) {
+    if (!car) {
       return '/assets/placeholder/car-dark.svg';
     }
-    return this.appService.getFileUrl(car.files[0]);
+
+    // Проверяем оба варианта для совместимости
+    const files = car.files || car.images || [];
+    
+    if (!files || !Array.isArray(files) || files.length === 0) {
+      return '/assets/placeholder/car-dark.svg';
+    }
+
+    const firstFile = files[0];
+    
+    // Если это строка (старый формат)
+    if (typeof firstFile === 'string') {
+      const trimmedPath = firstFile.trim();
+      if (!trimmedPath) {
+        return '/assets/placeholder/car-dark.svg';
+      }
+      return this.appService.getFileUrl(trimmedPath, car.id);
+    }
+
+    // Если это объект с path/filename
+    if (typeof firstFile === 'object' && firstFile !== null) {
+      const url = this.appService.getFileUrl(firstFile, car.id);
+      return url || '/assets/placeholder/car-dark.svg';
+    }
+
+    return '/assets/placeholder/car-dark.svg';
   });
+
+  imageError = signal(false);
+
+  onImageError() {
+    this.imageError.set(true);
+  }
+
+  getImageSrc(): string {
+    if (this.imageError()) {
+      return '/assets/placeholder/car-dark.svg';
+    }
+    return this.heroImage();
+  }
 
   badge = computed(() => {
     const car = this._car();

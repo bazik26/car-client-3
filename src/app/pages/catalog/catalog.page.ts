@@ -41,6 +41,7 @@ export class CatalogPage implements OnInit {
   protected cars = signal<any[]>([]);
   protected pagination = signal<any | null>(null);
   protected brands = signal<{ title: string; count: number }[]>([]);
+  protected filtersOpen = signal(false);
 
   protected readonly lifestylePresets: LifestylePreset[] = [
     {
@@ -83,7 +84,12 @@ export class CatalogPage implements OnInit {
     });
 
     this.loadBrands();
-    this.filters.valueChanges.subscribe(() => this.query());
+    // На десктопе фильтры применяются автоматически, на мобильных - по кнопке
+    this.filters.valueChanges.subscribe(() => {
+      if (typeof window !== 'undefined' && window.innerWidth > 768) {
+        this.query();
+      }
+    });
     this.query();
   }
 
@@ -121,6 +127,32 @@ export class CatalogPage implements OnInit {
     if (checked) current.add(option);
     else current.delete(option);
     this.filters.patchValue({ [control]: Array.from(current) } as Partial<FilterFormValue>);
+  }
+
+  toggleFilters(): void {
+    this.filtersOpen.update(v => !v);
+  }
+
+  closeFilters(): void {
+    this.filtersOpen.set(false);
+  }
+
+  applyFilters(): void {
+    this.query();
+    this.closeFilters();
+  }
+
+  getActiveFiltersCount(): number {
+    const value = this.filters.value;
+    let count = 0;
+    if (value.brand) count++;
+    if (value.fuel?.length) count += value.fuel.length;
+    if (value.drive?.length) count += value.drive.length;
+    if (value.gearbox?.length) count += value.gearbox.length;
+    if (value.lifestyle?.length) count += value.lifestyle.length;
+    if (value.priceMax !== 3500000) count++;
+    if (value.mileageMax !== 120000) count++;
+    return count;
   }
 
   private loadBrands(): void {

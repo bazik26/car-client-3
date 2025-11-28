@@ -17,15 +17,51 @@
   </div>
 
   <div class="container car__gallery">
-    <div class="car__gallery-main glass-card">
-      <img [ngSrc]="heroImage()" width="940" height="540" alt="{{ current.brand }} {{ current.model }}" class="car__gallery-image">
+    <div class="car__gallery-main glass-card"
+         (touchstart)="onTouchStart($event)"
+         (touchend)="onTouchEnd($event)">
+      <button type="button" 
+              class="car__gallery-nav car__gallery-nav--prev"
+              (click)="prevImage()"
+              *ngIf="gallery().length > 1"
+              aria-label="Предыдущее изображение">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <img 
+        [ngSrc]="heroImage()" 
+        width="940" 
+        height="540" 
+        [alt]="current.brand + ' ' + current.model" 
+        class="car__gallery-image"
+        (error)="onImageError(activeImage())">
+      <button type="button" 
+              class="car__gallery-nav car__gallery-nav--next"
+              (click)="nextImage()"
+              *ngIf="gallery().length > 1"
+              aria-label="Следующее изображение">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+      <div class="car__gallery-counter" *ngIf="gallery().length > 1">
+        {{ activeImage() + 1 }} / {{ gallery().length }}
+      </div>
     </div>
     <div class="car__gallery-thumbs">
       <button type="button"
               *ngFor="let image of gallery(); let idx = index"
               [class.active]="idx === activeImage()"
-              (click)="selectImage(idx)">
-        <img [ngSrc]="image" width="220" height="140" alt="{{ current.brand }}">
+              [class.error]="imageErrors().has(idx)"
+              (click)="selectImage(idx)"
+              [attr.aria-label]="'Изображение ' + (idx + 1)">
+        <img 
+          [ngSrc]="imageErrors().has(idx) ? '/assets/placeholder/car-dark.svg' : image" 
+          width="220" 
+          height="140" 
+          [alt]="current.brand + ' ' + (idx + 1)"
+          (error)="onImageError(idx)">
       </button>
     </div>
   </div>
@@ -63,7 +99,7 @@
         </div>
         <div>
           <span>VIN</span>
-          <strong>{{ current.vin || 'уточняется перед сделкой' }}</strong>
+          <a class="btn-primary btn-vin" routerLink="/contacts">Запросить VIN</a>
         </div>
         <div>
           <span>Дата обновления</span>

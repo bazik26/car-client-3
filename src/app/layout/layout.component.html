@@ -1,7 +1,7 @@
 <header class="header" [class.header--compact]="isCompactHeader">
   <div class="container header__inner">
     <a class="brand" routerLink="/home" (click)="closeMobileNav()">
-      <span class="brand__logo">PA</span>
+      <span class="brand__logo">AZ</span>
       <div class="brand__titles">
         <span class="brand__name">{{ brand.shortName }}</span>
         <span class="brand__tag">Авто с европейской историей</span>
@@ -17,13 +17,6 @@
     </nav>
 
     <div class="header__actions">
-      @if (unprocessedLeadsCount() > 0) {
-        <div class="leads-indicator" [class.leads-indicator--active]="unprocessedLeadsCount() > 0" title="Есть необработанные лиды">
-          <span class="leads-icon">!</span>
-          <span class="leads-count">{{ unprocessedLeadsCount() }}</span>
-          <div class="leads-pulse"></div>
-        </div>
-      }
       <button class="btn-ghost" type="button" (click)="navigate('contact-form')">
         <span>Получить подбор</span>
       </button>
@@ -51,9 +44,19 @@
       </div>
 
       <div class="mobile-nav__footer">
-        <span>{{ brand.phone }}</span>
-        <span>{{ brand.email }}</span>
-        <span class="btn-primary">{{ brand.phone }}</span>
+        <button class="btn-primary" type="button" (click)="navigate('contact-form'); closeMobileNav()">
+          Получить подбор
+        </button>
+        @if (brand.phone || brand.email) {
+          <div class="mobile-nav__contacts">
+            @if (brand.phone) {
+              <a [href]="brand.phoneLink" (click)="closeMobileNav()">{{ brand.phone }}</a>
+            }
+            @if (brand.email) {
+              <a [href]="'mailto:' + brand.email" (click)="closeMobileNav()">{{ brand.email }}</a>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>
@@ -66,23 +69,38 @@
 <footer class="footer">
   <div class="container footer__inner">
     <div class="footer__brand">
-      <span class="brand__logo">PA</span>
-      <div>
+      <div class="footer__logo-wrapper">
+        <span class="brand__logo brand__logo--large">AZ</span>
+      </div>
+      <div class="footer__brand-info">
         <p class="footer__title">{{ brand.name }}</p>
-        <p class="footer__text">Европейские автомобили с гарантией прозрачности сделки.</p>
+        <p class="footer__subtitle">{{ brand.shortName }}</p>
+        <p class="footer__text">Европейские автомобили с гарантией прозрачности сделки</p>
+        <div class="footer__legal">
+          <span>ИНН: {{ brand.inn }}</span>
+        </div>
       </div>
     </div>
+    
     <div class="footer__meta">
-      <div>
-        <h4>Контакты</h4>
-        <span>{{ brand.phone }}</span>
-        <span>{{ brand.email }}</span>
-      </div>
-      <div>
+      @if (brand.phone || brand.email) {
+        <div class="footer__section">
+          <h4>Контакты</h4>
+          @if (brand.phone) {
+            <a [href]="brand.phoneLink">{{ brand.phone }}</a>
+          }
+          @if (brand.email) {
+            <a [href]="'mailto:' + brand.email">{{ brand.email }}</a>
+          }
+        </div>
+      }
+      
+      <div class="footer__section">
         <h4>Адрес</h4>
         <p>{{ brand.address }}</p>
       </div>
-      <div>
+      
+      <div class="footer__section">
         <h4>Навигация</h4>
         <a routerLink="/home">Главная</a>
         <a routerLink="/catalog">Каталог</a>
@@ -90,10 +108,15 @@
       </div>
     </div>
   </div>
-  <div class="footer__copyright">
-    © {{ currentYear }} {{ brand.name }}. Все права защищены.
+  
+  <div class="footer__bottom">
+    <div class="container">
+      <div class="footer__copyright">
+        <span>© {{ currentYear }} {{ brand.name }}. Все права защищены.</span>
+      </div>
+    </div>
   </div>
 </footer>
 
-<!-- Chat Widget -->
-<app-chat-widget></app-chat-widget>
+<!-- Chat Widget - временно отключен -->
+<!-- <app-chat-widget></app-chat-widget> -->

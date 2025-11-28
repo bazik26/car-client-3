@@ -58,9 +58,15 @@
     object-fit: cover;
     transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
     filter: brightness(0.9) contrast(1.1);
+
+    &--error {
+      object-fit: contain;
+      filter: brightness(0.6);
+      opacity: 0.5;
+    }
   }
 
-  &:hover &__media {
+  &:hover &__media:not(&__media--error) {
     transform: scale(1.05);
     filter: brightness(1) contrast(1.2);
   }

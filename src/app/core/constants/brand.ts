@@ -1,18 +1,21 @@
 export const BRAND_CONFIG = {
-  name: 'Prime Auto Hub',
-  shortName: 'Prime Auto',
-  email: 'hello@prime-autohub.com',
-  phone: '+7 (495) 204-55-77',
-  phoneLink: 'tel:+74952045577',
+  name: 'ООО "Автодом"',
+  shortName: 'АвтоЗнатоки',
+  email: undefined,
+  phone: undefined,
+  phoneLink: undefined,
   currency: '₽',
-  address: 'Москва, Пресненская набережная 12',
-  city: 'Москва',
-  region: 'Московская область',
+  address: '625033, Тюменская область, г Тюмень, ул Николая Ростовцева, д. 24 к. 1, кв. 35',
+  city: 'Тюмень',
+  region: 'Тюменская область',
   country: 'Россия',
-  website: 'https://prime-autos.ru',
-  ogImage: '/assets/og/prime-auto.svg',
+  inn: '6658571727',
+  registrationDate: '29.03.2024',
+  authorizedCapital: '1 000 000 руб.',
+  website: 'https://avtoznatoki.ru',
+  ogImage: '/assets/og/avtoznatoki.svg',
   coordinates: {
-    latitude: 55.7496,
-    longitude: 37.5372
+    latitude: 57.1522,
+    longitude: 65.5272
   }
 } as const;

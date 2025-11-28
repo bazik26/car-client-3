@@ -24,89 +24,85 @@
           <i class="fas fa-search"></i>
           Найти авто мечты
         </a>
-        <button class="btn btn--secondary" type="button">
+        <a class="btn btn--secondary" routerLink="/contacts">
           <i class="fas fa-calculator"></i>
           Рассчитать стоимость
-        </button>
+        </a>
       </div>
       
       <div class="hero__stats">
-        <div class="stat-card">
-          <div class="stat-number">500+</div>
-          <div class="stat-label">Авто доставлено</div>
-          <div class="stat-detail">в 2024 году</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">14</div>
-          <div class="stat-label">дней</div>
-          <div class="stat-detail">средний срок доставки</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">99%</div>
-          <div class="stat-label">довольных клиентов</div>
-          <div class="stat-detail">возвращаются к нам</div>
-        </div>
+        <a class="stat-card stat-card--car" *ngIf="highlighted()[0] as car1" [routerLink]="['/cars', car1.id]" target="_blank">
+          <div class="stat-car-image">
+            <img [ngSrc]="getCarImageUrl(car1)" [alt]="car1.brand + ' ' + car1.model" width="200" height="120" class="stat-car-img">
+          </div>
+          <div class="stat-number">{{ formatPrice(getDiscountedPrice(car1.price, 0)) }}</div>
+          <div class="stat-label">{{ car1.brand }} {{ car1.model }}</div>
+          <div class="stat-detail">{{ car1.engine }}л • {{ car1.gearbox }} • {{ car1.drive }}</div>
+        </a>
+        <a class="stat-card stat-card--car" *ngIf="highlighted()[1] as car2" [routerLink]="['/cars', car2.id]" target="_blank">
+          <div class="stat-car-image">
+            <img [ngSrc]="getCarImageUrl(car2)" [alt]="car2.brand + ' ' + car2.model" width="200" height="120" class="stat-car-img">
+            <div class="stat-badge stat-badge--discount">Скидка 15%</div>
+          </div>
+          <div class="stat-number">{{ formatPrice(getDiscountedPrice(car2.price, 15)) }}</div>
+          <div class="stat-label">{{ car2.brand }} {{ car2.model }}</div>
+          <div class="stat-detail">{{ car2.engine }}л • {{ car2.gearbox }} • {{ car2.drive }}</div>
+        </a>
+        <a class="stat-card stat-card--car" *ngIf="highlighted()[2] as car3" [routerLink]="['/cars', car3.id]" target="_blank">
+          <div class="stat-car-image">
+            <img [ngSrc]="getCarImageUrl(car3)" [alt]="car3.brand + ' ' + car3.model" width="200" height="120" class="stat-car-img">
+            <div class="stat-badge stat-badge--new">Новинка</div>
+          </div>
+          <div class="stat-number">{{ formatPrice(getDiscountedPrice(car3.price, 0)) }}</div>
+          <div class="stat-label">{{ car3.brand }} {{ car3.model }}</div>
+          <div class="stat-detail">{{ car3.engine }}л • {{ car3.gearbox }} • {{ car3.drive }}</div>
+        </a>
       </div>
     </div>
     
     <div class="hero__visual">
       <div class="hero__car-showcase">
-        <div class="hero__car-card hero__car-card--featured" *ngIf="bestOffer()">
+        <a class="hero__car-card hero__car-card--featured" *ngIf="bestOffer()" [routerLink]="['/cars', bestOffer()?.id]" target="_blank">
           <div class="car-image">
-            <img [src]="bestOffer()?.images?.[0]" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" class="car-img" *ngIf="bestOffer()?.images?.[0]; else carPlaceholder">
-            <ng-template #carPlaceholder>
-              <div class="car-placeholder">
-                <i class="fas fa-car"></i>
-              </div>
-            </ng-template>
+            <img [ngSrc]="getCarImageUrl(bestOffer())" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" width="400" height="300" class="car-img">
             <div class="car-badge">Хит продаж</div>
           </div>
           <div class="car-info">
             <h3>{{ bestOffer()?.brand }} {{ bestOffer()?.model }} {{ bestOffer()?.year }}</h3>
-            <p class="car-price">{{ formatPrice(bestOffer()?.price) }}</p>
+            <p class="car-price">{{ formatPrice(getDiscountedPrice(bestOffer()?.price, 0)) }}</p>
             <div class="car-specs">
               <span>{{ bestOffer()?.engine }}л • {{ bestOffer()?.gearbox }} • {{ bestOffer()?.drive }}</span>
             </div>
           </div>
-        </div>
+        </a>
         
-        <div class="hero__car-card hero__car-card--secondary" *ngIf="popular()[0]">
+        <a class="hero__car-card hero__car-card--secondary" *ngIf="popular()[0]" [routerLink]="['/cars', popular()[0]?.id]" target="_blank">
           <div class="car-image">
-            <img [src]="popular()[0]?.images?.[0]" [alt]="popular()[0]?.brand + ' ' + popular()[0]?.model" class="car-img" *ngIf="popular()[0]?.images?.[0]; else carPlaceholder2">
-            <ng-template #carPlaceholder2>
-              <div class="car-placeholder">
-                <i class="fas fa-car"></i>
-              </div>
-            </ng-template>
+            <img [ngSrc]="getCarImageUrl(popular()[0])" [alt]="popular()[0]?.brand + ' ' + popular()[0]?.model" width="400" height="300" class="car-img">
             <div class="car-badge car-badge--sale">Скидка 15%</div>
           </div>
           <div class="car-info">
             <h3>{{ popular()[0]?.brand }} {{ popular()[0]?.model }} {{ popular()[0]?.year }}</h3>
-            <p class="car-price">{{ formatPrice(popular()[0]?.price) }}</p>
+            <p class="car-price">{{ formatPrice(getDiscountedPrice(popular()[0]?.price, 15)) }}</p>
             <div class="car-specs">
               <span>{{ popular()[0]?.engine }}л • {{ popular()[0]?.gearbox }} • {{ popular()[0]?.drive }}</span>
             </div>
           </div>
-        </div>
+        </a>
         
-        <div class="hero__car-card hero__car-card--tertiary" *ngIf="popular()[1]">
+        <a class="hero__car-card hero__car-card--tertiary" *ngIf="popular()[1]" [routerLink]="['/cars', popular()[1]?.id]" target="_blank">
           <div class="car-image">
-            <img [src]="popular()[1]?.images?.[0]" [alt]="popular()[1]?.brand + ' ' + popular()[1]?.model" class="car-img" *ngIf="popular()[1]?.images?.[0]; else carPlaceholder3">
-            <ng-template #carPlaceholder3>
-              <div class="car-placeholder">
-                <i class="fas fa-car"></i>
-              </div>
-            </ng-template>
+            <img [ngSrc]="getCarImageUrl(popular()[1])" [alt]="popular()[1]?.brand + ' ' + popular()[1]?.model" width="400" height="300" class="car-img">
             <div class="car-badge car-badge--new">Новинка</div>
           </div>
           <div class="car-info">
             <h3>{{ popular()[1]?.brand }} {{ popular()[1]?.model }} {{ popular()[1]?.year }}</h3>
-            <p class="car-price">{{ formatPrice(popular()[1]?.price) }}</p>
+            <p class="car-price">{{ formatPrice(getDiscountedPrice(popular()[1]?.price, 0)) }}</p>
             <div class="car-specs">
               <span>{{ popular()[1]?.engine }}л • {{ popular()[1]?.gearbox }} • {{ popular()[1]?.drive }}</span>
             </div>
           </div>
-        </div>
+        </a>
       </div>
       
       <div class="hero__features">
@@ -156,12 +152,12 @@
     <div class="best-offer__content" *ngIf="bestOffer(); else fallbackOffer">
       <div class="best-offer__car">
         <div class="car-image-large">
-          <img [src]="bestOffer()?.images?.[0] || '/assets/cars/default.jpg'" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" class="car-img-large">
+          <img [ngSrc]="getImageSrc(bestOffer())" [alt]="bestOffer()?.brand + ' ' + bestOffer()?.model" width="800" height="500" class="car-img-large" (error)="onImageError(bestOffer()?.id)" [ngClass]="{'car-img-large--error': imageError().has(bestOffer()?.id)}">
           <div class="car-badge-large">Лучшая цена</div>
         </div>
         <div class="car-details">
           <h3 class="car-title">{{ bestOffer()?.brand }} {{ bestOffer()?.model }} {{ bestOffer()?.year }}</h3>
-          <div class="car-price-large">{{ formatPrice(bestOffer()?.price) }}</div>
+          <div class="car-price-large">{{ formatPrice(getDiscountedPrice(bestOffer()?.price, 0)) }}</div>
           <div class="car-specs-large">
             <div class="spec-item">
               <i class="fas fa-calendar"></i>
@@ -188,14 +184,14 @@
         </div>
       </div>
       <div class="best-offer__actions">
-        <button class="btn btn--primary btn--large" [routerLink]="['/cars', bestOffer()?.id]">
+        <a class="btn btn--primary btn--large" [routerLink]="['/cars', bestOffer()?.id]" target="_blank">
           <i class="fas fa-eye"></i>
           Подробнее о машине
-        </button>
-        <button class="btn btn--secondary btn--large" routerLink="/catalog">
+        </a>
+        <a class="btn btn--secondary btn--large" routerLink="/catalog">
           <i class="fas fa-search"></i>
           Смотреть все авто
-        </button>
+        </a>
       </div>
     </div>
     
@@ -203,17 +199,12 @@
       <div class="best-offer__content">
         <div class="best-offer__car">
         <div class="car-image-large">
-          <img [src]="fallbackCar()?.images?.[0]" [alt]="fallbackCar()?.brand + ' ' + fallbackCar()?.model" class="car-img-large" *ngIf="fallbackCar()?.images?.[0]; else fallbackPlaceholder">
-          <ng-template #fallbackPlaceholder>
-            <div class="car-placeholder-large">
-              <i class="fas fa-car"></i>
-            </div>
-          </ng-template>
+          <img [ngSrc]="getImageSrc(fallbackCar())" [alt]="fallbackCar()?.brand + ' ' + fallbackCar()?.model" width="800" height="500" class="car-img-large" (error)="onImageError(fallbackCar()?.id)" [ngClass]="{'car-img-large--error': imageError().has(fallbackCar()?.id)}">
           <div class="car-badge-large">Популярный выбор</div>
         </div>
           <div class="car-details">
             <h3 class="car-title">{{ fallbackCar()?.brand }} {{ fallbackCar()?.model }} {{ fallbackCar()?.year }}</h3>
-            <div class="car-price-large">{{ formatPrice(fallbackCar()?.price) }}</div>
+            <div class="car-price-large">{{ formatPrice(getDiscountedPrice(fallbackCar()?.price, 0)) }}</div>
             <div class="car-specs-large">
               <div class="spec-item">
                 <i class="fas fa-calendar"></i>
@@ -312,7 +303,7 @@
 <section class="why-us" id="why-us">
   <div class="container">
     <div class="why-us__header">
-      <h2 class="why-us__title">Почему клиенты доверяют Prime Auto</h2>
+      <h2 class="why-us__title">Почему клиенты доверяют АвтоЗнатоки</h2>
       <p class="why-us__subtitle">
         Мы соединяем классический подход к покупке авто и современные цифровые инструменты, 
         чтобы сделать путь к новой машине понятным и безопасным.
@@ -336,7 +327,7 @@
       
       <div class="why-us__feature">
         <div class="feature-icon-large">
-          <i class="fas fa-tools"></i>
+          <i class="fas fa-clipboard-check"></i>
         </div>
         <h3>Экспертная инспекция</h3>
         <p>Инженеры с опытом работы в дилерских центрах составляют техническое заключение.</p>
@@ -399,12 +390,7 @@
     <div class="stories__grid">
       <article class="story-card" *ngFor="let car of soldRecently(); let i = index">
         <div class="story-card__image">
-          <img [src]="car.images?.[0]" [alt]="car.brand + ' ' + car.model" class="story-img" *ngIf="car.images?.[0]; else storyPlaceholder">
-          <ng-template #storyPlaceholder>
-            <div class="story-placeholder">
-              <i class="fas fa-car"></i>
-            </div>
-          </ng-template>
+          <img [ngSrc]="getCarImageUrl(car)" [alt]="car.brand + ' ' + car.model" width="400" height="300" class="story-img">
           <div class="story-badge">Продано</div>
         </div>
         <div class="story-card__content">

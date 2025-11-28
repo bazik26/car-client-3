@@ -23,17 +23,118 @@ export class CarPage implements OnInit, OnDestroy {
   protected car = signal<any | null>(null);
   protected gallery = computed(() => {
     const car = this.car();
-    if (!car?.files?.length) {
+    if (!car) {
       return ['/assets/placeholder/car-dark.svg'];
     }
-    return car.files.map((file: any) => this.appService.getFileUrl(file));
+
+    // Проверяем оба варианта для совместимости
+    const files = car.files || car.images || [];
+    
+    if (!files || !Array.isArray(files) || files.length === 0) {
+      return ['/assets/placeholder/car-dark.svg'];
+    }
+
+    const carId = car.id;
+    return files
+      .map((file: any) => {
+        // Если это строка
+        if (typeof file === 'string') {
+          const trimmedPath = file.trim();
+          return trimmedPath ? this.appService.getFileUrl(trimmedPath, carId) : null;
+        }
+        // Если это объект
+        if (typeof file === 'object' && file !== null) {
+          return this.appService.getFileUrl(file, carId);
+        }
+        return null;
+      })
+      .filter((url: string | null) => url !== null && url !== '') as string[];
   });
   protected activeImage = signal(0);
+  protected imageErrors = signal<Set<number>>(new Set());
+  
+  // Для свайп-жестов
+  private touchStartX = 0;
+  private touchStartY = 0;
+  private touchEndX = 0;
+  private touchEndY = 0;
+  private minSwipeDistance = 50;
+  
   protected heroImage = computed(() => {
     const images = this.gallery();
     const index = this.activeImage();
-    return images[Math.max(0, Math.min(index, images.length - 1))];
+    const imageUrl = images[Math.max(0, Math.min(index, images.length - 1))];
+    
+    // Если текущее изображение с ошибкой, показываем placeholder
+    if (this.imageErrors().has(index)) {
+      return '/assets/placeholder/car-dark.svg';
+    }
+    
+    return imageUrl || '/assets/placeholder/car-dark.svg';
   });
+
+  onImageError(index: number) {
+    this.imageErrors.update(errors => new Set([...errors, index]));
+  }
+
+  selectImage(index: number): void {
+    this.activeImage.set(index);
+    // Убираем ошибку при выборе нового изображения
+    this.imageErrors.update(errors => {
+      const newErrors = new Set(errors);
+      newErrors.delete(index);
+      return newErrors;
+    });
+  }
+
+  // Навигация по изображениям
+  nextImage(): void {
+    const images = this.gallery();
+    if (images.length > 0) {
+      const current = this.activeImage();
+      const next = (current + 1) % images.length;
+      this.selectImage(next);
+    }
+  }
+
+  prevImage(): void {
+    const images = this.gallery();
+    if (images.length > 0) {
+      const current = this.activeImage();
+      const prev = current === 0 ? images.length - 1 : current - 1;
+      this.selectImage(prev);
+    }
+  }
+
+  // Обработчики для свайп-жестов
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].screenX;
+    this.touchStartY = event.changedTouches[0].screenY;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.touchEndY = event.changedTouches[0].screenY;
+    this.handleSwipe();
+  }
+
+  private handleSwipe(): void {
+    const deltaX = this.touchEndX - this.touchStartX;
+    const deltaY = this.touchEndY - this.touchStartY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // Проверяем, что свайп горизонтальный и достаточно длинный
+    if (absDeltaX > this.minSwipeDistance && absDeltaX > absDeltaY) {
+      if (deltaX > 0) {
+        // Свайп вправо - предыдущее изображение
+        this.prevImage();
+      } else {
+        // Свайп влево - следующее изображение
+        this.nextImage();
+      }
+    }
+  }
 
   protected featureGroups = computed(() => {
     const car = this.car();
@@ -104,9 +205,5 @@ export class CarPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
-  }
-
-  selectImage(index: number): void {
-    this.activeImage.set(index);
   }
 }

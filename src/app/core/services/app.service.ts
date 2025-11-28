@@ -44,23 +44,69 @@ export class AppService {
     return this.http.post(`${this.API_URL}/contact-us`, payload).pipe(map((res) => res));
   }
 
-  getFileUrl(image: { path?: string; filename?: string }): string {
+  getFileUrl(image: any, carId?: number): string {
     if (!image) {
       return '';
     }
 
+    // Если это строка, обрабатываем как путь (для обратной совместимости)
+    if (typeof image === 'string') {
+      const path = image.trim();
+      if (!path) {
+        return '';
+      }
+      // Если path содержит старый домен shop-ytb-client, заменяем на наш API
+      if (path.includes('shop-ytb-client.onrender.com')) {
+        const relativePath = path.replace(/https?:\/\/shop-ytb-client\.onrender\.com/, '');
+        const normalizedPath = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
+        return `${this.API_URL}${normalizedPath}`;
+      }
+      // Если полный URL (другой домен) - используем как есть
+      if (/^https?:\/\//i.test(path)) {
+        return path;
+      }
+      // Если это путь вида /cars/001918/file.jpg, используем как есть
+      if (path.startsWith('/cars/') || path.startsWith('cars/')) {
+        const cleanPath = path.startsWith('/') ? path : `/${path}`;
+        return `${this.API_URL}${cleanPath}`;
+      }
+      // Если это просто имя файла (без слешей) и есть carId, формируем путь с padding
+      if (carId && !path.includes('/') && !path.startsWith('images/')) {
+        const paddedCarId = String(carId).padStart(6, '0');
+        return `${this.API_URL}/cars/${paddedCarId}/${path}`;
+      }
+      // Fallback: используем как есть (ServeStaticModule раздает файлы из /images по корню)
+      const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+      return `${this.API_URL}${normalizedPath}`;
+    }
+
+    // Если это объект - используем логику как в car-client
     const path = image.path || image.filename || '';
 
     if (!path) {
       return '';
     }
 
-    if (/^https?:\/\//i.test(path)) {
+    // Если path содержит старый домен shop-ytb-client, заменяем на наш API
+    if (path.includes('shop-ytb-client.onrender.com')) {
+      const relativePath = path.replace(/https?:\/\/shop-ytb-client\.onrender\.com/, '');
+      const normalizedPath = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
+      return `${this.API_URL}${normalizedPath}`;
+    }
+
+    // Если полный URL (другой домен) - используем как есть
+    if (path.startsWith('http')) {
       return path;
     }
 
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `${this.API_URL}${cleanPath}`;
+    // Относительный путь - добавляем API_URL
+    // Убираем 'images/' из начала пути, так как ServeStaticModule раздаёт файлы из /images по корню
+    let cleanPath = path;
+    if (cleanPath.startsWith('images/')) {
+      cleanPath = cleanPath.replace('images/', '');
+    }
+    const normalizedPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+    return `${this.API_URL}${normalizedPath}`;
   }
 
   getUnprocessedLeadsCount(): Observable<{ count: number }> {
