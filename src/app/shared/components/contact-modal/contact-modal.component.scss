@@ -136,10 +136,31 @@ select {
 
 select {
   cursor: pointer;
+  background-color: #1a1d25 !important;
+  color: #fff !important;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 40px;
+
+  // Стили для опций в выпадающем списке (Windows/Chrome)
+  option {
+    background-color: #1a1d25;
+    color: #fff;
+    padding: 12px 16px;
+  }
+}
+
+// Принудительные стили для select на всех платформах
+select::-ms-expand {
+  display: none;
+}
+
+// Webkit (Chrome, Safari, Edge)
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select {
+    color-scheme: dark;
+  }
 }
 
 textarea {
