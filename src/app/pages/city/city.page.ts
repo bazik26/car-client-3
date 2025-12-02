@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { switchMap, take } from 'rxjs';
 
 import { AppService } from '../../core/services/app.service';
@@ -13,7 +13,7 @@ import { CarCardComponent } from '../../shared/components/car-card/car-card.comp
 @Component({
   selector: 'app-city-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, CarCardComponent],
+  imports: [CommonModule, CarCardComponent],
   templateUrl: './city.page.html',
   styleUrl: './city.page.scss'
 })

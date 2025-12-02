@@ -3,14 +3,13 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { CommonModule } from '@angular/common';
 
 import { BRAND_CONFIG } from '../core/constants/brand';
-import { ChatWidgetComponent } from '@cars/chat-widget-lib';
 import { ContactModalComponent } from '../shared/components/contact-modal/contact-modal.component';
 import { ModalService } from '../shared/services/modal.service';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ChatWidgetComponent, ContactModalComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ContactModalComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
