@@ -13,11 +13,11 @@
       <button type="button" (click)="navigate('why-us')">Преимущества</button>
       <button type="button" (click)="navigate('collections')">Подборки</button>
       <a routerLink="/catalog" routerLinkActive="active">Каталог</a>
-      <a routerLink="/contacts" routerLinkActive="active">Контакты</a>
+      <button type="button" (click)="openContactModal()">Контакты</button>
     </nav>
 
     <div class="header__actions">
-      <button class="btn-ghost" type="button" (click)="navigate('contact-form')">
+      <button class="btn-ghost" type="button" (click)="openContactModal()">
         <span>Получить подбор</span>
       </button>
       <button class="burger" type="button" (click)="toggleMobileNav()">
@@ -40,11 +40,11 @@
         <button type="button" (click)="navigate('why-us')">Почему мы</button>
         <button type="button" (click)="navigate('collections')">Подборки</button>
         <button type="button" (click)="navigateToPage('/catalog')">Каталог</button>
-        <button type="button" (click)="navigateToPage('/contacts')">Контакты</button>
+        <button type="button" (click)="openContactModal()">Контакты</button>
       </div>
 
       <div class="mobile-nav__footer">
-        <button class="btn-primary" type="button" (click)="navigate('contact-form'); closeMobileNav()">
+        <button class="btn-primary" type="button" (click)="openContactModal()">
           Получить подбор
         </button>
         @if (brand.phone || brand.email) {
@@ -120,3 +120,8 @@
 
 <!-- Chat Widget - временно отключен -->
 <!-- <app-chat-widget></app-chat-widget> -->
+
+<!-- Модальное окно формы обратной связи -->
+@if (modalService.isContactModalOpen()) {
+  <app-contact-modal (close)="modalService.closeContactModal()"></app-contact-modal>
+}

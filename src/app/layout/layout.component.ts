@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 
 import { BRAND_CONFIG } from '../core/constants/brand';
 import { ChatWidgetComponent } from '@cars/chat-widget-lib';
+import { ContactModalComponent } from '../shared/components/contact-modal/contact-modal.component';
+import { ModalService } from '../shared/services/modal.service';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ChatWidgetComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, ChatWidgetComponent, ContactModalComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
@@ -18,6 +20,7 @@ export class LayoutComponent {
   protected mobileNav = false;
   protected readonly currentYear = new Date().getFullYear();
   private readonly router = inject(Router);
+  protected readonly modalService = inject(ModalService);
 
   @HostListener('window:scroll')
   onScroll() {
@@ -65,5 +68,10 @@ export class LayoutComponent {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
+  }
+
+  openContactModal(): void {
+    this.closeMobileNav();
+    this.modalService.openContactModal();
   }
 }

@@ -101,7 +101,7 @@
           <h2>Найденные автомобили</h2>
           <p *ngIf="!isLoading()">{{ cars().length }} автомобилей соответствует фильтрам</p>
         </div>
-        <a class="btn-primary" routerLink="/contacts">Получить индивидуальное предложение</a>
+        <button class="btn-primary" type="button" (click)="modalService.openContactModal()">Получить индивидуальное предложение</button>
       </header>
 
       <div class="cards-grid" *ngIf="!isLoading(); else loading">

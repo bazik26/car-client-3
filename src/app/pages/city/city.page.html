@@ -5,7 +5,7 @@
       <h1>{{ current.name }} и {{ current.region }}</h1>
       <p>АвтоЗнатоки организует подбор, проверку и доставку автомобилей из Европы в {{ current.name }}. Мы берём на
         себя логистику, документы и растаможку.</p>
-      <a class="btn-primary" routerLink="/contacts">Получить расчёт доставки</a>
+      <button class="btn-primary" type="button" (click)="modalService.openContactModal()">Получить расчёт доставки</button>
     </div>
   </div>
 

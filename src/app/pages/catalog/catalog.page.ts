@@ -5,6 +5,7 @@ import { take } from 'rxjs';
 
 import { AppService } from '../../core/services/app.service';
 import { SEOService } from '../../core/services/seo.service';
+import { ModalService } from '../../shared/services/modal.service';
 import { CarCardComponent } from '../../shared/components/car-card/car-card.component';
 
 interface LifestylePreset {
@@ -35,6 +36,7 @@ export class CatalogPage implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly appService = inject(AppService);
   private readonly seoService = inject(SEOService);
+  protected readonly modalService = inject(ModalService);
 
   protected filters!: FormGroup;
   protected isLoading = signal(true);

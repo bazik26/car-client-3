@@ -6,6 +6,7 @@ import { switchMap, take } from 'rxjs';
 import { AppService } from '../../core/services/app.service';
 import { SEOService } from '../../core/services/seo.service';
 import { BRAND_CONFIG } from '../../core/constants/brand';
+import { ModalService } from '../../shared/services/modal.service';
 import { getCityBySlug } from '../../core/config/cities.config';
 import { CarCardComponent } from '../../shared/components/car-card/car-card.component';
 
@@ -20,6 +21,7 @@ export class CityPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly appService = inject(AppService);
   private readonly seoService = inject(SEOService);
+  protected readonly modalService = inject(ModalService);
 
   protected city = signal(getCityBySlug('kazan'));
   protected cars = signal<any[]>([]);

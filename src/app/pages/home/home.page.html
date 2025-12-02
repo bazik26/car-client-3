@@ -24,10 +24,10 @@
           <i class="fas fa-search"></i>
           Найти авто мечты
         </a>
-        <a class="btn btn--secondary" routerLink="/contacts">
+        <button class="btn btn--secondary" type="button" (click)="modalService.openContactModal()">
           <i class="fas fa-calculator"></i>
           Рассчитать стоимость
-        </a>
+        </button>
       </div>
       
       <div class="hero__stats">
@@ -235,7 +235,7 @@
             <i class="fas fa-search"></i>
             Найти похожие авто
           </button>
-          <button class="btn btn--secondary btn--large" routerLink="/contacts">
+          <button class="btn btn--secondary btn--large" type="button" (click)="modalService.openContactModal()">
             <i class="fas fa-phone"></i>
             Получить консультацию
           </button>
@@ -421,10 +421,10 @@
         Укажите три параметра — и в течение суток мы подготовим прозрачные предложения 
         с расчётом пошлин и доставки.
       </p>
-      <a class="btn btn--primary btn--large" routerLink="/contacts">
+      <button class="btn btn--primary btn--large" type="button" (click)="modalService.openContactModal()">
         <i class="fas fa-paper-plane"></i>
         Оставить заявку
-      </a>
+      </button>
     </div>
   </div>
 </section>

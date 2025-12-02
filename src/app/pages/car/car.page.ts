@@ -6,6 +6,7 @@ import { Subscription, switchMap } from 'rxjs';
 import { AppService } from '../../core/services/app.service';
 import { SEOService } from '../../core/services/seo.service';
 import { BRAND_CONFIG } from '../../core/constants/brand';
+import { ModalService } from '../../shared/services/modal.service';
 
 @Component({
   selector: 'app-car-page',
@@ -18,6 +19,7 @@ export class CarPage implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly appService = inject(AppService);
   private readonly seoService = inject(SEOService);
+  protected readonly modalService = inject(ModalService);
 
   protected readonly brand = BRAND_CONFIG;
   protected car = signal<any | null>(null);

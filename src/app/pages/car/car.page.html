@@ -12,7 +12,7 @@
         <span>С учётом доставки и растаможки</span>
         <span>Можно зарезервировать на 3 дня</span>
       </div>
-      <a class="btn-primary" routerLink="/contacts">Забронировать автомобиль</a>
+      <button class="btn-primary" type="button" (click)="modalService.openContactModal()">Забронировать автомобиль</button>
     </div>
   </div>
 
@@ -99,7 +99,7 @@
         </div>
         <div>
           <span>VIN</span>
-          <a class="btn-primary btn-vin" routerLink="/contacts">Запросить VIN</a>
+          <button class="btn-primary btn-vin" type="button" (click)="modalService.openContactModal()">Запросить VIN</button>
         </div>
         <div>
           <span>Дата обновления</span>
@@ -125,7 +125,7 @@
       <p>Подготовим индивидуальные варианты, расчёт доставки и прозрачный бюджет. Менеджер свяжется в течение часа.</p>
     </div>
     <div class="car__cta-contacts">
-      <a class="btn-primary" routerLink="/contacts">Связаться с нами</a>
+      <button class="btn-primary" type="button" (click)="modalService.openContactModal()">Связаться с нами</button>
       <div>
         <span>{{ brand.phone }}</span>
         <span>{{ brand.email }}</span>

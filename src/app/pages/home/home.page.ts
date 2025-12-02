@@ -6,6 +6,7 @@ import { take } from 'rxjs';
 import { AppService } from '../../core/services/app.service';
 import { SEOService } from '../../core/services/seo.service';
 import { BRAND_CONFIG } from '../../core/constants/brand';
+import { ModalService } from '../../shared/services/modal.service';
 
 import { CarCardComponent } from '../../shared/components/car-card/car-card.component';
 
@@ -26,6 +27,7 @@ interface ShowcaseFilter {
 export class HomePage implements OnInit {
   private readonly appService = inject(AppService);
   private readonly seoService = inject(SEOService);
+  protected readonly modalService = inject(ModalService);
 
   protected readonly brand = BRAND_CONFIG;
   protected isLoading = signal(true);
