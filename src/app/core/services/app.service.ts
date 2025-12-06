@@ -9,17 +9,19 @@ import { environment } from '../../../environments/environment';
 export class AppService {
   private readonly http = inject(HttpClient);
   private readonly API_URL = environment.API_URL;
+  private readonly PROJECT_ID = environment.PROJECT_ID;
 
   getBrandsAndModels(): Observable<any> {
     return this.http.get(`${this.API_URL}/cars/all-brands-and-models`).pipe(map((res) => res));
   }
 
   getBrandsAndModelsWithCount(): Observable<any> {
-    return this.http.get(`${this.API_URL}/cars/brands-and-models-with-count`).pipe(map((res) => res));
+    const params = new HttpParams().set('projectId', this.PROJECT_ID);
+    return this.http.get(`${this.API_URL}/cars/brands-and-models-with-count`, { params }).pipe(map((res) => res));
   }
 
   getCars(options: { limit?: number; sortBy?: string; sortOrder?: 'ASC' | 'DESC'; random?: boolean } = {}): Observable<any[]> {
-    let params = new HttpParams();
+    let params = new HttpParams().set('projectId', this.PROJECT_ID);
     Object.entries(options).forEach(([key, value]) => {
       if (value === undefined || value === null) return;
       params = params.append(key, String(value));
@@ -29,15 +31,20 @@ export class AppService {
   }
 
   searchCars(payload: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/cars/search`, payload).pipe(map((res) => res));
+    const payloadWithProjectId = { ...payload, projectId: this.PROJECT_ID };
+    return this.http.post(`${this.API_URL}/cars/search`, payloadWithProjectId).pipe(map((res) => res));
   }
 
   getCar(id: number | string): Observable<any> {
-    return this.http.get(`${this.API_URL}/cars/car/${id}`).pipe(map((res) => res));
+    const params = new HttpParams().set('projectId', this.PROJECT_ID);
+    return this.http.get(`${this.API_URL}/cars/car/${id}`, { params }).pipe(map((res) => res));
   }
 
   getSoldCars(limit = 12): Observable<any[]> {
-    return this.http.get<any[]>(`${this.API_URL}/cars/sold`, { params: { limit } }).pipe(map((cars) => cars || []));
+    const params = new HttpParams()
+      .set('limit', String(limit))
+      .set('projectId', this.PROJECT_ID);
+    return this.http.get<any[]>(`${this.API_URL}/cars/sold`, { params }).pipe(map((cars) => cars || []));
   }
 
   contactUs(payload: any): Observable<any> {
