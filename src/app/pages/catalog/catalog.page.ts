@@ -44,6 +44,7 @@ export class CatalogPage implements OnInit {
   protected pagination = signal<any | null>(null);
   protected brands = signal<{ title: string; count: number }[]>([]);
   protected filtersOpen = signal(false);
+  protected currentPage = signal(1);
 
   protected readonly lifestylePresets: LifestylePreset[] = [
     {
@@ -89,6 +90,7 @@ export class CatalogPage implements OnInit {
     // На десктопе фильтры применяются автоматически, на мобильных - по кнопке
     this.filters.valueChanges.subscribe(() => {
       if (typeof window !== 'undefined' && window.innerWidth > 768) {
+        this.currentPage.set(1); // Сбрасываем на первую страницу при изменении фильтров
         this.query();
       }
     });
@@ -116,6 +118,7 @@ export class CatalogPage implements OnInit {
       gearbox: [],
       lifestyle: []
     });
+    this.currentPage.set(1);
     this.query();
   }
 
@@ -140,6 +143,7 @@ export class CatalogPage implements OnInit {
   }
 
   applyFilters(): void {
+    this.currentPage.set(1); // Сбрасываем на первую страницу при применении фильтров
     this.query();
     this.closeFilters();
   }
@@ -157,6 +161,37 @@ export class CatalogPage implements OnInit {
     return count;
   }
 
+  getPageNumbers(): number[] {
+    const pagination = this.pagination();
+    if (!pagination) return [];
+    
+    const current = this.currentPage();
+    const total = pagination.totalPages;
+    const pages: number[] = [];
+    
+    // Показываем максимум 5 страниц вокруг текущей
+    let start = Math.max(1, current - 2);
+    let end = Math.min(total, current + 2);
+    
+    // Если мы близко к началу, показываем первые страницы
+    if (current <= 3) {
+      start = 1;
+      end = Math.min(5, total);
+    }
+    
+    // Если мы близко к концу, показываем последние страницы
+    if (current >= total - 2) {
+      start = Math.max(1, total - 4);
+      end = total;
+    }
+    
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    
+    return pages;
+  }
+
   private loadBrands(): void {
     this.appService
       .getBrandsAndModelsWithCount()
@@ -168,6 +203,34 @@ export class CatalogPage implements OnInit {
         },
         error: () => this.brands.set([])
       });
+  }
+
+  goToPage(page: number): void {
+    const pagination = this.pagination();
+    if (!pagination) return;
+    
+    if (page >= 1 && page <= pagination.totalPages) {
+      this.currentPage.set(page);
+      this.query();
+      // Прокрутка вверх при смене страницы
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }
+
+  nextPage(): void {
+    const pagination = this.pagination();
+    if (pagination?.hasNext) {
+      this.goToPage(this.currentPage() + 1);
+    }
+  }
+
+  prevPage(): void {
+    const pagination = this.pagination();
+    if (pagination?.hasPrev) {
+      this.goToPage(this.currentPage() - 1);
+    }
   }
 
   private query(): void {
@@ -188,7 +251,7 @@ export class CatalogPage implements OnInit {
     this.appService
       .searchCars({
         ...payload,
-        page: 1,
+        page: this.currentPage(),
         limit: 12
       })
       .pipe(take(1))

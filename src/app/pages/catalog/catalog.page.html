@@ -99,7 +99,11 @@
       <header class="catalog__results-header">
         <div>
           <h2>Найденные автомобили</h2>
-          <p *ngIf="!isLoading()">{{ cars().length }} автомобилей соответствует фильтрам</p>
+          <p *ngIf="!isLoading() && pagination()">
+            {{ pagination().total }} автомобилей найдено
+            <span *ngIf="pagination().totalPages > 1">(страница {{ currentPage() }} из {{ pagination().totalPages }})</span>
+          </p>
+          <p *ngIf="!isLoading() && !pagination()">{{ cars().length }} автомобилей соответствует фильтрам</p>
         </div>
         <button class="btn-primary" type="button" (click)="modalService.openContactModal()">Получить индивидуальное предложение</button>
       </header>
@@ -113,6 +117,36 @@
           <div class="skeleton" *ngFor="let _ of [].constructor(6)"></div>
         </div>
       </ng-template>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="pagination() && pagination().totalPages > 1">
+        <button 
+          class="pagination__btn" 
+          [class.pagination__btn--disabled]="!pagination()?.hasPrev"
+          (click)="prevPage()"
+          [disabled]="!pagination()?.hasPrev">
+          ← Назад
+        </button>
+        
+        <div class="pagination__pages">
+          <button 
+            *ngFor="let page of getPageNumbers()"
+            class="pagination__page"
+            [class.pagination__page--active]="page === currentPage()"
+            (click)="goToPage(page)"
+            [disabled]="page === currentPage()">
+            {{ page }}
+          </button>
+        </div>
+        
+        <button 
+          class="pagination__btn" 
+          [class.pagination__btn--disabled]="!pagination()?.hasNext"
+          (click)="nextPage()"
+          [disabled]="!pagination()?.hasNext">
+          Вперед →
+        </button>
+      </div>
     </section>
   </div>
 </section>
